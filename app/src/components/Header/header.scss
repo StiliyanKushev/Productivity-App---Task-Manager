@@ -1,0 +1,59 @@
+//import all functions and variables
+@import '../../scss/initial/mixins.scss';
+@import '../../scss/initial/variables.scss';
+
+#site-header{
+    position: fixed;
+    left: -3px;
+    top: -2px;
+
+    background-image: $header-svg;
+    background-repeat: no-repeat;
+    background-size: auto;
+    height: 60rem;
+    #nav-checkbox{
+        display: none;
+    }
+
+    #logo{
+        position: relative;
+        background-image: $logo-svg;
+        background-repeat: no-repeat;
+        background-size: auto;
+        height: 9rem;
+        width: 15rem;
+        z-index: 40;
+        p{
+            position: relative;
+            left: .8rem;
+            top: 1.25rem;
+            font-family: $second-font-family;
+            font-size: $default-logo-font-size;
+        }
+    }
+    nav{
+        height: 22.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        ul{
+            li{
+                padding-top: .7rem;
+                padding-bottom: .7rem;
+                width: 12rem;
+                display: flex;
+                justify-content: center;
+                a{
+                    padding-top: .3rem;
+                    padding-bottom: .3rem;
+                    width: 100%;
+                    text-align: center;
+                    font-size: $default-header-li-font-size;
+               }
+            }
+            .current a,li a:hover{
+                background-color: rgba(255,255,255,0.1);
+           }
+        }
+    }
+}

@@ -1,0 +1,33 @@
+// import external css
+@import url('https://fonts.googleapis.com/css?family=Muli:200,300,400|Noto+Serif|Roboto:100,300,400&display=swap');
+
+// import the initial styles
+@import './initial/variables';
+@import './initial/reset';
+@import './initial/typography';
+@import './initial/mixins';
+
+//apply default variables
+body{
+    background-color: $layout-background-color;
+    border-color: $layout-background-border-color;
+    border-width: $layout-border-size;
+    border-style: solid;
+
+    @include fullscreen(1);
+}
+
+#root{
+    padding: $default-site-padding; //if using image the secondary color will be visible
+}
+
+#site-content{
+    background-image: $background-image;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position-x:center;
+    background-position-y: bottom;
+
+    padding-left: $default-site-content-padding;
+    padding-right: $default-site-content-padding;
+}

@@ -1,0 +1,182 @@
+@import './variables.scss';
+
+// short way to make a responsive @media
+@mixin responsive($width,$height) {
+    $w: initial;
+    $h: initial;
+
+    @if $width{
+        $w: $width;
+    }
+    @if $height{
+        $h: $height;
+    }
+    
+    @media all and (max-width:$w) and (max-height:$h) {
+        @content;  
+    }
+}
+
+@mixin fullscreen-content($bool){
+    @if $bool == 1 {
+        width: calc(100vw - 20px); //($layout-border-size + $default-site-padding) * 2
+        height: calc(100vh - 20px);
+    }
+}
+
+@mixin fullscreen($bool){
+    @if $bool == 1 {
+        @extend %center;
+        width: 100vw;
+        height: 100vh;
+
+        #site-content{
+            @include fullscreen-content(1);
+        }
+    }
+}
+
+%center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@mixin include-header($type){ // mobile or desktop
+    @if $type == "desktop"{
+        padding-left: 7rem;
+    }
+    @else if $type == "mobile"{
+        padding-top: 6rem;
+    }
+}
+
+@mixin exclude-header($type){ // mobile or desktop
+    @if $type == "desktop"{
+        padding-top: 0rem !important;
+    }
+    @else if $type == "mobile"{
+        padding-left: 0rem !important;
+    }
+}
+
+@mixin set-mobile-mode() {
+    body{
+        border-width: 0px !important;
+    }
+
+    #root{
+        padding: 0rem !important;
+        width: 100% !important;
+        height: 100% !important;
+    }
+
+    #site-content{
+        padding-left: $default-site-content-padding !important;
+
+        width: 100% !important;
+        height: 100% !important;
+    }
+    @include set-header-mobile();
+}
+
+@mixin set-header-mobile() {
+    #site-header{
+        left: 0;
+        top: 0;
+        background: none;
+        height: fit-content;
+        #logo-shadow{
+            filter: drop-shadow(0px 10px 0px rgba(0, 0, 0, 0.3));
+        }
+        #bars{
+            cursor: pointer;
+            display: block;
+            position: fixed;
+            z-index: 20;
+            right: 1rem;
+            top: 1rem;
+            margin-right: .4rem;
+            .bar{
+                margin-top: 5px;
+                width: 1.8rem;
+                height: 3px;
+                background-color: white;
+            }
+        }
+        #nav-checkbox:checked ~ #bars{
+            .bar1{
+                position: relative;
+                transform: rotate(45deg) !important;
+                top: 8px;
+            }
+
+            .bar2{
+                transform: rotate(-45deg) !important;
+            }
+
+            .bar3{
+                display: none !important;
+            }
+        }
+        #nav-checkbox:checked ~ nav{
+            padding-top: 4rem;
+            padding-bottom: 2rem;
+            top:-2rem;
+            z-index: -10;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-content: center;
+    
+            height: fit-content;
+    
+            background-color: $default-dark-color;
+    
+            ul{
+                li{
+                    width: 100%;
+                }
+            }
+        }
+        #logo{
+            height: 5.5rem;
+            width: 100vw;
+            background-image: none;
+            background-color: $default-dark-color;
+            clip-path: polygon(0 0, 100% 0%, 100% 80%, 0 94%);
+            p{
+                position: relative;
+                left: 0px;
+                top: 1rem;
+                width: 100%;
+                text-align: center;
+            }
+        }
+        nav{
+            height: 22.5rem;
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            ul{
+                li{
+                    padding-top: .7rem;
+                    padding-bottom: .7rem;
+                    width: 12rem;
+                    display: flex;
+                    justify-content: center;
+                    a{
+                        padding-top: .3rem;
+                        padding-bottom: .3rem;
+                        width: 100%;
+                        text-align: center;
+                        font-size: $default-header-li-font-size;
+                   }
+                }
+                .current a,li a:hover{
+                    background-color: rgba(255,255,255,0.1);
+               }
+            }
+        }
+    }
+}
