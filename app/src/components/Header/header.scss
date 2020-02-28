@@ -57,3 +57,13 @@
         }
     }
 }
+
+@media screen and (max-height:500px){
+    @include set-header-mobile();
+
+    #site-content{
+        div{
+            @include exclude-header("mobile");
+        }
+    }
+}

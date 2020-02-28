@@ -1,49 +1,63 @@
 import { toast } from 'react-toastify';
+import validator from 'validator';
+const isEmail = validator.isEmail;
 
 function handleFormInvalid(errors){
-    //TODO display some sort of indicator that the data is incorect
-    for(let err of errors){
-        toast.error(err);
+    for(let err in errors){
+        toast.error(errors[err]);
     }
 }
 
-function validateEmail(value){
-    //TODO verify by regex
-    if(!value){
-        return "No Email given!";
+function handleLogin(body){
+    const errors = [];
+
+    if(!body || Object.keys(body) === 0){
+        errors.push("Invalid arguments given!");
+    }
+    else {
+        if(typeof body.email !== 'string' || !isEmail(body.email)){
+            errors.push('Please provide a correct email address');
+        }
+        if(typeof body.password !== 'string' || body.password.trim().length < 8){
+            errors.push('Password must be at least 8 characters long');
+        }
     }
 
-    return true;
+    return errors;
 }
 
-function validatePassword(value){
-    if(!value){
-        return "No password given!";
+function handleRegister(body){
+    const errors = [];
+
+    if(!body || Object.keys(body) === 0){
+        errors.push("Invalid arguments given!");
+    }
+    else {
+        if(typeof body.username !== 'string' || body.username.trim().length < 4){
+            errors.push('Username must be at least 4 characters long');
+        }
+        if(typeof body.email !== 'string' || !isEmail(body.email)){
+            errors.push('Please provide a correct email address');
+        }
+        if(typeof body.password !== 'string' || body.password.trim().length < 8){
+            errors.push('Password must be at least 8 characters long');
+            errors.push("Passwords don't match!");
+        }
+        else{
+            if(typeof body.rpassword !== 'string' || body.rpassword.trim() !== body.password.trim()){
+                errors.push("Passwords don't match!");
+            }
+        }
     }
 
-    if(value.length < 8){
-        return "Password should be at least 8 characters long!";
-    }
-
-    return true;
+    return errors;
 }
 
-function validateRepeatPassword(value,other){
-    if(!value){
-        return "You need to repeat the password!";
-    }
-    if(value !== other['Password']){
-        return "Passwords must match!";
-    }
-
-    return true;
-}
 
 const FormHandler = {
     handleFormInvalid,
-    validateEmail,
-    validatePassword,
-    validateRepeatPassword
+    handleRegister,
+    handleLogin
 };
 
 export default FormHandler;

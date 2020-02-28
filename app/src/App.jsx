@@ -6,26 +6,26 @@ import './App.scss';
 
 import AppHeader from './components/Header/Header.jsx';
 import AppContent from './components/Content/Content.jsx';
+import { withCookies } from 'react-cookie';
 
-
-function App() {
-  return (
-    <Fragment>
-      <ToastContainer
-        position="top-right"
-        autoClose={5000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnVisibilityChange
-        draggable
-        pauseOnHover
-      />
-      <AppHeader />
-      <AppContent />
-    </Fragment>
-  );
+const App = props => {
+    return (
+      <Fragment>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnVisibilityChange
+          draggable
+          pauseOnHover
+        />
+        <AppHeader />
+        <AppContent cookies={props.cookies} />
+      </Fragment>
+    );
 }
 
-export default App;
+export default withCookies(App);

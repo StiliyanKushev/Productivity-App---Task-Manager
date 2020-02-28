@@ -7,6 +7,7 @@
         height: 100%;
         display: flex;
         flex-direction: row-reverse;
+        @include view-fullscreen(1);
         div{
             margin-top: 10rem;
             width: fit-content;
@@ -24,6 +25,7 @@
 @media screen and (max-width: 640px){
     @include set-mobile-mode();
     #home-view{
+        height: 100vh !important;
         // @include exclude-header("mobile"); it is excluded by default
         justify-content: center;
         div{
@@ -46,7 +48,7 @@
 @media screen and (max-width: 455px){
     @include set-mobile-mode();
     #site-content{
-        div{
+        #home-view{
             h1{
                 font-size: 2.2rem;
             }
@@ -56,3 +58,9 @@
         }
     }
 }
+
+// @media screen and (max-height:450px){
+//     body{
+//         @include fullscreen(0);
+//     }
+// }

@@ -2,19 +2,25 @@
 
 #site-content{
     #login-view{
+        @include view-fullscreen(1);
         @include include-header("desktop");
         margin-top: 0rem;
-        width: 100%;
-        height: 100%;
         display: flex;
         justify-content: center;
         align-items: center;
     }
 }
 
-
 @media screen and (max-width: 640px){
+    @include set-mobile-mode();
     #login-view{
+        height: 100vh !important; // no margin
         @include exclude-header("mobile"); // use this to center relative to the screen not the site content
+    }
+}
+
+@media screen and (max-height:450px){
+    #login-view{
+        @include view-fullscreen(0);
     }
 }

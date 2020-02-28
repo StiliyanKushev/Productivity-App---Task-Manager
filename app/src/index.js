@@ -1,9 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import {Provider} from 'react-redux';
 import {BrowserRouter} from 'react-router-dom';
-import App from './App.jsx';
+import { CookiesProvider } from 'react-cookie';
 
-// import all main styling logic
+import App from './App.jsx';
 import './scss/styles.scss';
 
-ReactDOM.render(<BrowserRouter><App /></BrowserRouter>, document.getElementById('root'));
+import store from './store.js';
+
+ReactDOM.render(
+<CookiesProvider>
+    <Provider store={store}>
+        <BrowserRouter>
+            <App />
+        </BrowserRouter>
+    </Provider>
+</CookiesProvider>, document.getElementById('root'));

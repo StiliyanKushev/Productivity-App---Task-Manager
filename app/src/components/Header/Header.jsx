@@ -1,43 +1,51 @@
 import React, { Component } from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './header.scss';
+import { connect } from 'react-redux';
+import {setCurrent} from '../../actions/navActions';
 
-class AppHeader extends Component{
-    constructor(props){
+class AppHeader extends Component {
+    constructor(props) {
         super(props);
 
-        this.list = [];
-        if(this.props.auth){
-            this.list = [
-                <li key="home" className="current"><Link to="/" onClick={this.uncheckCheckbox}>Home</Link></li>,
-                <li key="schedule" ><Link to="/schedule" onClick={this.uncheckCheckbox}>Schedule</Link></li>,
-                <li key="about" ><Link to="/about" onClick={this.uncheckCheckbox}>About me</Link></li>,
-                <li key="logout" ><Link to="/logout" onClick={this.uncheckCheckbox}>Logout</Link></li>,
-            ];
-        }
-        else{
-            this.list = [
-                    <li key="home" className="current" onClick={this.uncheckCheckbox}><Link to="/">Home</Link></li>,
-                    <li key="login" ><Link to="/login" onClick={this.uncheckCheckbox}>Login</Link></li>,
-                    <li key="register" ><Link to="/register" onClick={this.uncheckCheckbox}>Register</Link></li>,
-            ];
-        }
+        this.handleLinkClick = this.handleLinkClick.bind(this);
     }
 
+    handleLinkClick(e) {
+        this.uncheckCheckbox();
+
+        this.props.setCurrent(e.currentTarget.text);
+
+        //re render the component to display the new "current" tag
+        this.forceUpdate();
+    }
+
+    uncheckCheckbox() {
+        document.getElementById("nav-checkbox").checked = false;
+    };
+
     componentDidMount() {
+        this.setState(this.state);
         window.addEventListener('resize', this.uncheckCheckbox);
         this.uncheckCheckbox();
     }
-
-    uncheckCheckbox () {
-        document.getElementById("nav-checkbox").checked = false;
-    };
 
     componentWillUnmount() {
         window.removeEventListener('resize', this.uncheckCheckbox);
     }
 
-    render(){
+    render() {
+        let list = [];
+
+        for(let name in this.props.nav.list){
+            let route = this.props.nav.list[name];
+            let item =
+            <li key={name} className={name === this.props.nav.current ? 'current' : ''}>
+            <Link to={route} onClick={this.handleLinkClick}>{name}</Link></li>;
+            
+            list.push(item);
+        }
+
         return (
             <header id="site-header">
                 <input type="checkbox" name="nav-checkbox" id="nav-checkbox"></input>
@@ -53,7 +61,7 @@ class AppHeader extends Component{
                 </div>
                 <nav>
                     <ul>
-                        {this.list}
+                        {list}
                     </ul>
                 </nav>
             </header>
@@ -61,4 +69,11 @@ class AppHeader extends Component{
     }
 }
 
-export default AppHeader;
+const stateToProps = state => {
+    return {
+        user: state.user,
+        nav: state.nav,
+    }
+}
+
+export default connect(stateToProps,{setCurrent})(AppHeader);

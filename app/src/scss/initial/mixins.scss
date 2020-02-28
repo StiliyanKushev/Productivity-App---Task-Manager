@@ -17,24 +17,18 @@
     }
 }
 
-@mixin fullscreen-content($bool){
-    @if $bool == 1 {
-        width: calc(100vw - 20px); //($layout-border-size + $default-site-padding) * 2
-        height: calc(100vh - 20px);
+@mixin view-fullscreen($bool){
+    @if $bool == 1{
+        height: calc(100vh - 22px);
+    }
+
+    @else if $bool == 0{
+        height: fit-content !important;
+        padding-top: 10rem !important;
+        padding-bottom: 10rem !important;
     }
 }
 
-@mixin fullscreen($bool){
-    @if $bool == 1 {
-        @extend %center;
-        width: 100vw;
-        height: 100vh;
-
-        #site-content{
-            @include fullscreen-content(1);
-        }
-    }
-}
 
 %center{
     display: flex;
@@ -76,6 +70,10 @@
 
         width: 100% !important;
         height: 100% !important;
+
+        // div{
+        //     height: 100vh !important;
+        // }
     }
     @include set-header-mobile();
 }

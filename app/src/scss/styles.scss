@@ -13,8 +13,6 @@ body{
     border-color: $layout-background-border-color;
     border-width: $layout-border-size;
     border-style: solid;
-
-    @include fullscreen(1);
 }
 
 #root{
@@ -30,4 +28,7 @@ body{
 
     padding-left: $default-site-content-padding;
     padding-right: $default-site-content-padding;
+
+    width: calc(100vw - 22px);
+    height: fit-content;
 }

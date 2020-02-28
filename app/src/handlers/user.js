@@ -1,24 +1,50 @@
-import { toast } from 'react-toastify';
+import {
+    toast
+} from 'react-toastify';
 
-function login(data){
-    //TODO
-    console.log(data);
+async function sendAuth(data, route) {
+    let response = {
+        success: false,
+        data: null
+    };
+    const raw = await fetch('http://localhost:8080/auth/' + route, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    });
+    
+    let res = await raw.json();
 
-    //TODO IF VALID DATA AND TOAST ERROR IF FETCHED DATA ERROR
-    //toast.success(fetchedData.result);
-    toast.success("Welcome User");
+    if (!res.success) {
+        for (let err of res.errors) {
+            toast.error(err);
+        }
+    } else {
+        toast.success(res.message);
+        response = {
+            success: true,
+            data: {
+                username: res.user.username,
+                email: res.user.email,
+                token: res.token
+            }
+        }
+    }
+    return response;
 }
 
-function register(data){
-    //TODO
-    console.log(data);
-
-    //TODO IF VALID DATA AND TOAST ERROR IF FETCHED DATA ERROR
-    //toast.success(fetchedData.result);
-    toast.success("Welcome User");
+function login(data) {
+    return sendAuth(data, "login");
 }
 
-function logout(){
+function register(data) {
+    return sendAuth(data, "register");
+}
+
+function logout() {
     //TODO
 }
 

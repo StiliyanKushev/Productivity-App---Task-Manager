@@ -2,97 +2,78 @@ import React, { Component, Fragment } from 'react';
 import {Link} from 'react-router-dom';
 import './Form.scss';
 
+import {setCurrent} from '../../actions/navActions';
+import { connect } from 'react-redux';
+
 class Form extends Component{
     constructor(props){
         super(props);
 
         if(!this.props.submit){
-            throw new Error("Submit function not given as a property to a <Form>!");
+            throw new Error("Submit object not given as property of <Form>!");
         }
-
-        if(!this.props.submitText){
-            this.props.submitText = "Submit"; // set default value
+        if(this.props.suggest && !this.props.suggest.url){
+            throw new Error("Suggest url not given as propery of <Form suggest={}>");
         }
-
-        if(this.props.validate && !this.props.onInvalid){
-            throw new Error("onInvalid not given but valudate object given!");
+        if(this.props.suggest && !this.props.suggest.text){
+            throw new Error("Suggest text not given as propery of <Form suggest={}>");
         }
 
         this.id = this.props.id;
-        this.submit = this.props.submit;
-        this.submitText = this.props.submitText;
-        this.suggest = this.props.suggest;
         this.inputs = this.props.inputs;
+        this.submit = this.props.submit;
+        this.suggest = this.props.suggest;
         this.validate = this.props.validate;
-        this.onInvalid = this.props.onInvalid;
-        this.values = this.props.values;
 
-        let obj = {};
-
-        // init the obj
-        if(this.inputs){
-            for(let key in this.inputs){
-                obj[key] = null;
+        //set default values
+        for(let k in this.inputs){
+            if(!this.inputs[k].value){
+                this.inputs[k].value = "";
             }
         }
-
-        // set default values
-        if(this.values){
-            for(let key in this.values){
-                let value = this.values[key];
-                
-                if(obj[key] !== undefined){ // if obj contains the certain propery [key]
-                    obj[key] = value; // update it 
-                }
-            }
-        }
-
-        this.state = obj; // init the state
 
         //bind functions
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.normalizedState = this.normalizedState.bind(this);
+        this.handleSuggestClick = this.handleSuggestClick.bind(this);
+
+        this.state = this.inputs;
     }
 
     componentDidMount(){
         this.setState(this.state);
     }
+    
+    normalizedState() {
+        let data = {};
+        for(let key in this.state){
+            data[key] = this.state[key].value;
+        }
 
+        return data;
+    }
+
+    handleSuggestClick(event){
+        let def = event.currentTarget.href;
+        let rx = /\/([a-z]|[A-Z])+$/gm;
+        let route = rx.exec(def)[0];
+        this.props.setCurrent(route);
+    }
+    
     handleSubmit(event){
         //dont reload the page
         event.preventDefault();
 
         //check if valid
-        let isValid = true;
-        let errors = [];
+        let errors = this.validate.validate(this.normalizedState());
 
-        for(let key in this.validate){
-            let value = this.validate[key];
-
-            if(this.state[key] === undefined){
-                throw new Error("You are trying to validate an unspecified input field!");
-            }
-
-            //validate
-            let result = value(this.state[key],this.state);
-
-            if(result === undefined || result === null){
-                throw new Error("One or more of the valiating functions is not returning value");
-            }
-
-            if(result !== true){ // THERE IS ERROR
-                isValid = false;
-                errors.push(result); // result is string with error
-            }
-        }
-
-        if(isValid === true){ // ALL OK!
-            return this.submit(this.state); // return data to the submit function
+        if(errors.length === 0){ // ALL OK!
+            return this.submit.action(this.normalizedState()); // return data to the submit function
         }
 
         else{
-            console.log(errors);
-            return this.onInvalid(errors);
+            return this.validate.onError(errors);
         }
     }
 
@@ -100,43 +81,36 @@ class Form extends Component{
         let name = event.target.getAttribute('name');
         let value = event.target.value;
         
-        let data = {};
-        data[name] = value;
+        let temp = this.state;
+        temp[name].value = value;
 
-        this.setState(data);
+        this.setState(temp);
     }
 
     render(){
         // generate the labels and inputs
         const items = [];
 
-        // print the inputs and add values if given in props
-        for(let key in this.inputs){
-            let type = this.inputs[key];
-
-            let value = key;
-
-            let temp = this.state[key];
-            if(temp){ // value was given in props
-                value = temp;
-            }
+        for(let inputKey in this.state){
+            let inputData = this.state[inputKey];
 
             items.push(
-                <Fragment key={key}>
-                    <label htmlFor={key} style={{display:"none"}}>{key}</label> {/* hide it but have to include it because of semantics */}
-                    <input name={key} type={type} placeholder={value} onChange={this.handleChange}/>
+                <Fragment key={inputKey + "-fragment"}>
+                    <label htmlFor={inputKey} style={{display:"none"}}>{inputData.text}</label> {/* hide it but have to include it because of semantics */}
+                    <input autoComplete={inputData.autoComplete ? "on" : "off"} value={inputData.value || ""} name={inputKey} type={inputData.type || "text"} placeholder={inputData.text} onChange={this.handleChange}/>
                 </Fragment>
             );
         }
 
+
         return (
-            <form id={this.id ? this.id : null} onSubmit={this.handleSubmit}>
+            <form id={this.id ? this.id : ""} onSubmit={this.handleSubmit}>
                 {items}
-                <input id="submit" type="submit" value={this.submitText}></input>
-                <Link id="suggest-link" to={this.suggestLink || "#"}>{this.suggest}</Link>
+                <input autoComplete="off" id="submit" type="submit" value={this.submit.text || "Submit"}></input>
+                <Link id="suggest-link" to={this.suggest.url || "#"} onClick={this.handleSuggestClick} >{this.suggest.text}</Link>
             </form>
         );
     }
 }
 
-export default Form;
+export default connect(null,{setCurrent})(Form);
