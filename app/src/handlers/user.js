@@ -7,7 +7,7 @@ async function sendAuth(data, route) {
         success: false,
         data: null
     };
-    const raw = await fetch('http://localhost:8080/auth/' + route, {
+    const raw = await fetch('http://192.168.1.132:8080/auth/' + route, {
         method: 'POST',
         headers: {
             'Accept': 'application/json',

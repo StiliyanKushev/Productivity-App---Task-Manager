@@ -1,3 +1,0 @@
-function saveUser(cookies){
-
-}

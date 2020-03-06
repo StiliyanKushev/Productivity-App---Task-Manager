@@ -20,15 +20,18 @@ body{
 }
 
 #site-content{
-    background-image: $background-image;
+    //background-image: $background-image;
     background-repeat: no-repeat;
     background-size: cover;
     background-position-x:center;
     background-position-y: bottom;
 
-    padding-left: $default-site-content-padding;
-    padding-right: $default-site-content-padding;
-
-    width: calc(100vw - 22px);
+    //width: calc(100vw - 22px);
+    width: 100%;
     height: fit-content;
+
+    & > div{
+        padding-left: $default-site-content-padding;
+        padding-right: $default-site-content-padding;
+    }
 }

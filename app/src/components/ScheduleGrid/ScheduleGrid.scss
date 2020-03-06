@@ -1,0 +1,161 @@
+#site-content{
+    #schedule-view{
+        #grid{
+            display: grid;
+            grid-template-columns: repeat(7, 9rem);
+            grid-template-rows: 1fr repeat(5, 9rem);
+            grid-column-gap: 0px;
+            grid-row-gap: 0px;
+        
+            & > p{
+            color:white;
+            font-family: 'Muli';
+            font-weight:200;
+            font-size:1.2rem;
+            padding-bottom: 1rem;
+            text-align:center;
+            }
+            
+            .edge-l{
+            border-right: 1px solid rgba(255,255,255,0.7);
+            border-top: 1px solid rgba(255,255,255,0.7);
+            border-bottom: 1px solid rgba(255,255,255,0.7);
+            }
+            
+            .edge-r{
+            border-left: 1px solid rgba(255,255,255,0.7);
+            border-top: 1px solid rgba(255,255,255,0.7);
+            border-bottom: 1px solid rgba(255,255,255,0.7);
+            }
+            
+            .edge-t{
+            border-right: 1px solid rgba(255,255,255,0.7);
+            border-left: 1px solid rgba(255,255,255,0.7);
+            border-bottom: 1px solid rgba(255,255,255,0.7);
+            }
+            
+            .edge-b{
+            border-right: 1px solid rgba(255,255,255,0.7);
+            border-top: 1px solid rgba(255,255,255,0.7);
+            border-left: 1px solid rgba(255,255,255,0.7);
+            }
+            
+            .corner-tl{
+            border-bottom: 1px solid rgba(255,255,255,0.7);
+            border-right: 1px solid rgba(255,255,255,0.7);
+            }
+            
+            .corner-tr{
+            border-bottom: 1px solid rgba(255,255,255,0.7);
+            border-left: 1px solid rgba(255,255,255,0.7);
+            }
+            
+            .corner-br{
+            border-top: 1px solid rgba(255,255,255,0.7);
+            border-left: 1px solid rgba(255,255,255,0.7);
+            }
+            
+            .corner-bl{
+            border-top: 1px solid rgba(255,255,255,0.7);
+            border-right: 1px solid rgba(255,255,255,0.7);
+            }
+            
+            .inner{
+            border: 1px solid rgba(255,255,255,0.7);
+            }
+            
+            .current{
+            background: rgba(255,255,255,0.2);
+            }
+            
+            .item{
+            padding:.5rem;
+            
+            .date{
+                margin:0px;
+                color:white;
+                font-size: 1.2em;
+                font-family: 'Muli';
+                font-weight:200;
+            }
+            
+            .date-e{
+                display:none;
+            }
+            
+            .innerGrid{
+                width:94%;
+                height:74%;
+                padding: 0.2rem;
+
+                margin: auto;
+                
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                grid-template-rows: repeat(4, 1fr);
+                grid-column-gap: 5px;
+                grid-row-gap: 5px;
+                
+                div{
+                cursor: pointer;
+                border-radius:4rem;
+                border:1px solid white;
+                box-shadow: inset 0px 4px 4px 0px rgba(0,0,0,0.25);
+                }
+                
+                .empty,
+                .more{
+                border:none;
+                box-shadow:none;
+                }
+                
+                .more{
+                color:white;
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                font-size: 1.3rem;
+                p{
+                    font-family: "Muli";
+                    font-weight:200;
+                    font-size: .8em;
+                    margin:0;
+                    padding:0;
+                    position:absolute;
+                }
+                }
+                
+                .add-new{
+                color:white;
+                
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                
+                p{
+                    font-family: "Muli";
+                    position:absolute;
+                    margin:0rem;
+                    padding:0rem;
+                    font-size: 1.2em;
+                    font-weight:400;
+                    text-align:center;
+                }
+                }
+                
+                .red{
+                background:#BA5241;
+                }
+                
+                .blue{
+                background:rgb(0,187,255);
+                }
+                
+                .yellow{
+                background:#FFC300;
+                }
+            }
+            }
+        }
+    }
+}

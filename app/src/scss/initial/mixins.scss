@@ -29,6 +29,22 @@
     }
 }
 
+@mixin useBackground($bool) {
+    @if $bool == 1{
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-position-x: center;
+        background-position-y: bottom;
+        background-image: $background-image;
+    }
+    @else if $bool == 0{
+        background-repeat: initial;
+        background-size: initial;
+        background-position-x: initial;
+        background-position-y: initial;
+        background-image: none;
+    }
+}
 
 %center{
     display: flex;
@@ -38,7 +54,7 @@
 
 @mixin include-header($type){ // mobile or desktop
     @if $type == "desktop"{
-        padding-left: 7rem;
+        padding-left: calc(14rem);
     }
     @else if $type == "mobile"{
         padding-top: 6rem;
@@ -50,7 +66,7 @@
         padding-top: 0rem !important;
     }
     @else if $type == "mobile"{
-        padding-left: 0rem !important;
+        padding-left: 3rem !important;
     }
 }
 
@@ -66,7 +82,8 @@
     }
 
     #site-content{
-        padding-left: $default-site-content-padding !important;
+        padding-left: 0em;
+        //padding-left: $default-site-content-padding !important;
 
         width: 100% !important;
         height: 100% !important;

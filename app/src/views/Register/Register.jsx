@@ -34,7 +34,7 @@ class RegisterView extends Component {
                     id="#register-form"
                     inputs={{
                         username: { text: "Username", type: "text", autoComplete: true,/**,value:"New User" */ },
-                        email: { text: "Email", type: "email", autoComplete: true, },
+                        email: { text: "Email", type: "email", autoComplete: true, lowerCase:true},
                         password: { text: "Password", type: "password" },
                         rpassword: { text: "Repeat Password", type: "password" },
                     }}

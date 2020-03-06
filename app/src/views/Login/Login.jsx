@@ -19,6 +19,7 @@ class LoginView extends Component {
 
     async handleSubmit(data){
         let res = await UserHandler.login(data);
+        
         if(res.success){
             //TODO cookie for token expire date
             this.props.cookies.set("token",res.data.token,{path:"/"});
@@ -35,7 +36,7 @@ class LoginView extends Component {
                 <Form
                     id="#login-form"
                     inputs={{
-                        email: { text: "Email", type: "email", autoComplete: true,/**,value:cookies.username */ },
+                        email: { text: "Email", type: "email", autoComplete: true,lowerCase:true/**,value:cookies.username */ },
                         password: { text: "Password", type: "password" },
                     }}
                     suggest={{ text: "Not a user? Join us!", url: "/register" }}

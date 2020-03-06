@@ -2,9 +2,10 @@
 
 #site-content{
     #login-view{
+        @include useBackground(1);
         @include view-fullscreen(1);
         @include include-header("desktop");
-        margin-top: 0rem;
+        //margin-top: 0rem;
         display: flex;
         justify-content: center;
         align-items: center;

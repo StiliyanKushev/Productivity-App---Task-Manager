@@ -1,0 +1,12 @@
+@import '../../scss/initial/mixins.scss';
+
+#site-content{
+    #schedule-view{
+        @include include-header("desktop");
+        @include view-fullscreen(1);
+        margin-top: 0rem;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+}

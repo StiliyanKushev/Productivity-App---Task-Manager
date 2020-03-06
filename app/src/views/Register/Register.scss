@@ -2,6 +2,7 @@
 
 #site-content{
     #register-view{
+        @include useBackground(1);
         @include include-header("desktop");
         @include view-fullscreen(1);
         margin-top: 0rem;

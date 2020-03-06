@@ -48,7 +48,7 @@ class Form extends Component{
     normalizedState() {
         let data = {};
         for(let key in this.state){
-            data[key] = this.state[key].value;
+            data[key] = this.state[key].lowerCase === true ? this.state[key].value.toLowerCase() : this.state[key].value;
         }
 
         return data;
@@ -104,7 +104,7 @@ class Form extends Component{
 
 
         return (
-            <form id={this.id ? this.id : ""} onSubmit={this.handleSubmit}>
+            <form className="react-form" id={this.id ? this.id : ""} onSubmit={this.handleSubmit}>
                 {items}
                 <input autoComplete="off" id="submit" type="submit" value={this.submit.text || "Submit"}></input>
                 <Link id="suggest-link" to={this.suggest.url || "#"} onClick={this.handleSuggestClick} >{this.suggest.text}</Link>

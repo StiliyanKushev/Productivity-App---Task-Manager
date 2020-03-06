@@ -5,12 +5,10 @@ function getCurrent(){
     let fromAuthList = getKeyByValue(authNavState.list,path);
 
     let key = fromGuestList || fromAuthList || "Home";
-
     return key;
 }
 
 const guestNavState = {
-    current: "Home",
     list: {
         "Home": '/',
         "Login": '/login',
@@ -19,11 +17,10 @@ const guestNavState = {
 }
 
 const authNavState = {
-    current: 'Home',
     list: {
         "Home": '/',
         "Schedule": '/schedule',
-        "About me": '/about',
+        "About me": '/aboutme',
         "Logout": '/logout',
     }
 }
@@ -33,17 +30,14 @@ function getKeyByValue(object, value) {
     return res;
 }
 
-
-//TODO if auth in cookies initial state is authState
-
 const navReducer = (state = {...guestNavState,current:getCurrent()}, action) => {
     switch (action.type) {
         case 'SET_NAV_AUTH': {
-            return authNavState;
+            return {current:getCurrent(),...authNavState};
         }
 
         case 'SET_NAV_GUEST': {
-            return guestNavState;
+            return {current:getCurrent(),...guestNavState};
         }
 
         case 'SET_CURRENT': {

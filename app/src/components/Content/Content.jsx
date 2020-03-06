@@ -7,8 +7,10 @@ import HomeView from '../../views/Home/Home';
 import LoginView from '../../views/Login/Login';
 import LogoutView from '../../views/Logout/Logout';
 import RegisterView from '../../views/Register/Register';
-import { connect } from 'react-redux';
+import AboutMeView from '../../views/AboutMe/AboutMe';
+import ScheduleView from '../../views/Schedule/Schedule';
 
+import { connect } from 'react-redux';
 import {setNavAuth} from '../../actions/navActions';
 
 class AppContent extends Component{
@@ -30,14 +32,15 @@ class AppContent extends Component{
                         <CustomRoute exact path="/login" verification={!token} render={(props) => <LoginView {...props} cookies={this.props.cookies}/>} />
                         <CustomRoute exact path="/register" verification={!token} render={(props) => <RegisterView {...props} cookies={this.props.cookies}/>} />
                         <CustomRoute exact path="/logout" verification={token} render={(props) => <LogoutView {...props} cookies={this.props.cookies}/>} />
+                        <CustomRoute exact path="/schedule" verification={token} render={(props) => <ScheduleView {...props} cookies={this.props.cookies} />} />
+                        <CustomRoute exact path="/aboutme" verification={token} render={(props) => <AboutMeView {...props} cookies={this.props.cookies} />} />
                         <Redirect to="/"/>
                     </Switch>
                 </main>
         );
     }
 }
-
-//TODO do this logic inside of the custom route ↓                                       
+                                 
 function mapStateToProps(state){
     return {
         nav: state.nav // when log out the content re renders and re calculates the token
