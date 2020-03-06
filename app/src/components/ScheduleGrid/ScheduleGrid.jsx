@@ -19,6 +19,7 @@ class ScheduleGrid extends Component {
         this.generateCells = this.generateCells.bind(this);
         this.addTask = this.addTask.bind(this);
         this.isCurrent = this.isCurrent.bind(this);
+        this.generateWeekdays = this.generateWeekdays.bind(this);
     }
 
     classifyCells(){
@@ -76,6 +77,32 @@ class ScheduleGrid extends Component {
 
     addTask(index){
         this.props.addTask(index,this.state.cells);
+    }
+
+    generateWeekdays(){
+        let days = [
+            <p key={1}>Monday</p>,
+            <p key={2}>Tuesday</p>,
+            <p key={3}>Wednesday</p>,
+            <p key={4}>Thursday</p>,
+            <p key={5}>Friday</p>,
+            <p key={6}>Saturday</p>,
+            <p key={7}>Sunday</p>,
+        ];
+        let wd = new Date(this.props.year,this.props.month - 1,1).getDay();
+        if(wd === 0) wd = 7;
+        
+        let newDays = [];
+        let i = wd - 1;
+        let count = 0;
+
+        while(count < 7){
+            newDays.push(days[i++]);
+            count++;
+            if(i === 7)i = 0;
+        }
+        
+        return newDays;
     }
 
     async generateCells(){
@@ -187,14 +214,7 @@ class ScheduleGrid extends Component {
     render() {
         return (
             <div id="grid">
-                <p>Monday</p>
-                <p>Tuesday</p>
-                <p>Wednesday</p>
-                <p>Thursday</p>
-                <p>Friday</p>
-                <p>Saturday</p>
-                <p>Sunday</p>
-
+                {this.generateWeekdays()}
                 {this.state.cells}
             </div>
         );
