@@ -206,8 +206,51 @@ class ScheduleGrid extends Component {
         return cells;
     }
 
+    async fetchSingleCell(year,month,day){
+        //get all of the tasks
+        let res = await TaskHandler.getTask(year,month,day,this.props.cookies.get("token"));
+
+        let tasks = res.tasks;
+
+        let currentTasks = [];
+        let moreTasks = [];
+        for (let j = 0; j < tasks.length; j++) {
+            if (j < 18)
+                currentTasks.push(
+                    <Task key={j} task={tasks[j]} />
+                );
+            else {
+                moreTasks.push(
+                    <Task key={j} task={tasks[j]} />
+                );
+            }
+        }
+
+        let empty = [];
+        for (let j = 0; j < 19 - tasks.length; j++) {
+            empty.push(
+                <div key={j} className="empty"></div>
+            );
+        }
+
+        let cell = 
+                <TaskCell 
+                addTask={this.addTask} 
+                getClassBy={this.getClassBy} 
+                key={day} 
+                keyI={day} 
+                tasks={currentTasks} 
+                empty={empty} 
+                moreTasks={moreTasks}/>
+
+        return cell;
+    }
+
     async componentDidMount(){
         let cells = this.props.preCells || await this.generateCells();
+        if(this.props.modifiedCell){
+           this.fetchSingleCell(this.props.year,this.props.month - 1,this.props.modifiedCell);
+        }
         this.setState({cells});
     }
 

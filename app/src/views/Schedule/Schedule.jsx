@@ -19,6 +19,7 @@ class ScheduleView extends Component {
             year: 2020,
             month:3,
             day:0, // just some default value (used only in 'create' mode)
+            modifiedCell: undefined, // when create is finished just re fetch the data for the cell with the new task
             savedCells:undefined, // when clicked create render these cached tasks (no reloading of data)
         };
 
@@ -48,6 +49,7 @@ class ScheduleView extends Component {
         if(res.success){
             toast.success(res.message);
             this.setState({
+                modifiedCell:this.state.day,
                 savedCells:undefined,
                 mode:"main"
             });
@@ -67,10 +69,12 @@ class ScheduleView extends Component {
             </div>);
         }
         if(this.state.mode === "main"){
-            return(
+            let main = 
             <div id="schedule-view">
-                <ScheduleGrid preCells={this.state.savedCells} addTask={this.addTask} cookies={this.props.cookies} year={this.state.year} month={this.state.month}/>
-            </div>);
+            <ScheduleGrid modifiedCell={this.state.modifiedCell} preCells={this.state.savedCells} addTask={this.addTask} cookies={this.props.cookies} year={this.state.year} month={this.state.month}/>
+            </div>;
+            this.state.modifiedCell = undefined;
+            return(main);
         }
     }
 }

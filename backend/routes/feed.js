@@ -28,6 +28,43 @@ function validate(payload) {
     }
 }
 
+function getTaskCell(req, res, next) {
+    let year = req.params.year;
+    let month = req.params.month;
+    let day = req.params.day;
+
+    let fromDate = new Date(year,month,day);
+    let toDate = new Date(year,month,day,23,59,59); // last moment of the day
+
+    Task.find({
+        $and:[
+            {
+                date: {
+                    $gte: fromDate.toISOString(),
+                    $lte: toDate.toISOString()
+                }
+            },
+            {
+                author: req.user.username
+            }
+        ]
+        })
+        .then((tasks) => {
+            res
+                .status(200)
+                .json({
+                    message: 'Fetched cell tasks successfully.',
+                    tasks
+                });
+        })
+        .catch((error) => {
+            if (!error.statusCode) {
+                error.statusCode = 500;
+            }
+            next(error);
+        });
+}
+
 function getTasks(req, res, next) {
     let year = req.params.year;
     let month = req.params.month;
@@ -88,6 +125,7 @@ async function createTask(req, res, next) {
     })
 }
 
+router.post("/tasks/get/:year/:month/:day",authCheck, getTaskCell);
 router.post("/tasks/get/:year/:month",authCheck, getTasks);
 router.post("/tasks/create",authCheck, createTask);
 // router.post("/tasks/remove/:id", authCheck, removeTask);
