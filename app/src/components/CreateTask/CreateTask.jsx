@@ -2,17 +2,19 @@ import React from "react";
 import { Component } from "react";
 
 import "./CreateTask.scss";
+import { connect } from "react-redux";
+import {setDay,addTaskToCell} from '../../actions/scheduleActions';
+import TaskHandler from '../../handlers/task';
+import {toast} from 'react-toastify';
 
 class CreateTask extends Component{
     constructor(props){
         super(props);
 
-        const zeroPad = (num) => String(num).padStart(2, '0')
-
         this.state = {
-            date: `${zeroPad(this.props.month)}/${zeroPad(this.props.day)}/${this.props.year}`,
             importancyLevel: 1,
             description:"",
+            visible:false,
         }
 
         this.isCurrent = this.isCurrent.bind(this);
@@ -20,6 +22,13 @@ class CreateTask extends Component{
         this.handleSubmit = this.handleSubmit.bind(this);
         this.handleCancel = this.handleCancel.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.generateDate = this.generateDate.bind(this);
+        this.closeSelf = this.closeSelf.bind(this);
+    }
+
+    generateDate(){
+        const zeroPad = (num) => String(num).padStart(2, '0')
+        return `${zeroPad(this.props.month)}/${zeroPad(this.props.day)}/${this.props.year}`;
     }
 
     isCurrent(type){
@@ -31,12 +40,39 @@ class CreateTask extends Component{
 
     handleCancel(e){
         e.preventDefault();
-        this.props.goBack();
+        this.closeSelf();
+    }
+
+    closeSelf(){
+        this.setState({
+            importancyLevel: 1,
+            description:"",
+        },() => {
+            this.props.setDay(-1)
+        });
+    }
+
+    async createTask(importancyLevel,description){
+        let date = new Date(this.props.year,this.props.month - 1,this.props.day);
+        let token = this.props.cookies.get("token");
+        let res = await TaskHandler.createTask(date,importancyLevel,description,token);
+
+        if(res.success){
+            toast.success(res.message);
+            //update the global state
+            this.props.addTaskToCell(this.props.day - 1,res.task); // index, task
+
+            this.closeSelf();
+        }
+        else{
+            for(let e in res.errors)
+            toast.error(res.errors[e]);
+        }
     }
 
     handleSubmit(e){
         e.preventDefault();
-        this.props.createTask(this.state.importancyLevel,this.state.description);
+        this.createTask(this.state.importancyLevel,this.state.description);
     }
 
     handleChange(e){
@@ -47,11 +83,20 @@ class CreateTask extends Component{
         this.setState({importancyLevel:importance});
     }
 
+    componentWillReceiveProps(newProps){        
+        if(newProps.day !== -1){
+            this.setState({visible:true}); 
+        }
+        else{
+            this.setState({visible:false});
+        }
+    }
+
     render(){
         return (
-            <div id="create-task-menu">
+            <div id="create-task-menu" style={{display: this.state.visible ? "initial" : "none"}}>
                 <div id="content">
-                    <p id="date">Date: <span>{this.state.date}</span></p>
+                    <p id="date">Date: <span>{this.generateDate()}</span></p>
                     <div id="variants">
                         <div id="option">
                             <p>Regular</p>
@@ -67,7 +112,7 @@ class CreateTask extends Component{
                         </div>
                     </div>
                     <form>
-                        <textarea rows="8" cols="20" placeholder="Description" onChange={this.handleChange}>
+                        <textarea rows="8" cols="20" placeholder="Description" value={this.state.description} onChange={this.handleChange}>
                         </textarea>
 
                         <button id="submit" onClick={this.handleSubmit}>Create</button>
@@ -79,4 +124,12 @@ class CreateTask extends Component{
     }
 }
 
-export default CreateTask;
+const mapStateToProps = (state) => {
+    return {
+        year: state.schedule.year,
+        month: state.schedule.month,
+        day: state.schedule.day,
+    }
+}
+
+export default connect(mapStateToProps,{setDay,addTaskToCell})(CreateTask);

@@ -2,8 +2,9 @@ import React from 'react';
 import { Component } from 'react';
 
 import TaskHandler from '../../handlers/task';
-import Task from '../../components/Task/Task';
 import TaskCell from '../../components/TaskCell/TaskCell';
+import {connect} from 'react-redux';
+import {setCells} from '../../actions/scheduleActions';
 
 import './ScheduleGrid.scss';
 
@@ -16,10 +17,13 @@ class ScheduleGrid extends Component {
 
         this.classifyCells = this.classifyCells.bind(this);
         this.getClassBy = this.getClassBy.bind(this);
-        this.generateCells = this.generateCells.bind(this);
-        this.addTask = this.addTask.bind(this);
         this.isCurrent = this.isCurrent.bind(this);
+
+        this.generateCells = this.generateCells.bind(this);
+        this.fetchCells = this.fetchCells.bind(this);
+        
         this.generateWeekdays = this.generateWeekdays.bind(this);
+        this.currentMonthDays = new Date(this.props.year,this.props.month,0).getDate();
     }
 
     classifyCells(){
@@ -75,10 +79,6 @@ class ScheduleGrid extends Component {
         return `${this.classifiedCells[index]} ${this.isCurrent(index)}`;
     }
 
-    addTask(index){
-        this.props.addTask(index,this.state.cells);
-    }
-
     generateWeekdays(){
         let days = [
             <p key={1}>Monday</p>,
@@ -105,163 +105,102 @@ class ScheduleGrid extends Component {
         return newDays;
     }
 
-    async generateCells(){
-        let res = await TaskHandler.getTasks(this.props.year,this.props.month,this.props.cookies.get("token"));
-        let tasks = res.tasks;
-        let cellTasks = [];
-        let cells = [];
-        let currentMonthDays = new Date(this.props.year,this.props.month,0).getDate();
-        
-        if(!tasks || tasks.length === 0){
-            for(let i = 0; i < currentMonthDays;i++){
-                let empty = [];
-                for (let j = 0; j < 19; j++) {
-                    empty.push(
-                        <div key={j} className="empty"></div>
-                    );
-                }
-                cells[i] =
-                    <div key={i} className={`item ${this.getClassBy(i + 1)}`}>
-                        <p className="date">{i + 1}</p>
-                        <div className="innerGrid">
-                            {empty}
-                            <div className="add-new" onClick={() => this.addTask(i + 1)}><p>+</p></div>
-                        </div>
-                    </div>;
-            }
-            for(let i = currentMonthDays; i < 35;i++){
-                cells[i] = 
-                    <div key={i} className={`item ${this.getClassBy(i + 1)}`}>
-                        <p className="date-e">{i + 1}</p>
-                    </div>;
-            }
-            return cells;
+    componentDidMount(){
+        // if the cells havent been fetched yet
+        if(!this.props.fetched){
+            this.generateCells();   // render the empty grid
+            this.fetchCells();      // render the fetched grid when cells are fetched
         }
+    }
 
-        //fill with empty arrays
-        for(let i = 0; i < 35; i++){
-            cellTasks[i] = [];
-        }
 
-        //fill cellTasks
-        for(let i = 0; i < 35; i++){
-            let cellDate = new Date(this.props.year,this.props.month - 1,i + 1);
-            if(cellDate !== "Invalid Date"){
-                //put all tasks for this date in the cell
-                for(let j = 0; j < tasks.length; j++){
-                    let taskDate = new Date(tasks[j].date);
-                    if(cellDate.getDate() === taskDate.getDate()){ // this task is for this cell
-                        cellTasks[i].push(tasks[j]);
-                        tasks.splice(j--,1);
+    fetchCells(){
+        TaskHandler.getTasks(this.props.year,this.props.month,this.props.cookies.get("token"))
+        .then(res => {
+            let tasks = res.tasks;
+            let cellTasks = [];
+            let cells = [];
+
+            //fill with empty arrays
+            for (let i = 0; i < 35; i++) {
+                cellTasks[i] = [];
+            }
+
+            //fill cellTasks
+            for (let i = 0; i < 35; i++) {
+                let cellDate = new Date(this.props.year, this.props.month - 1, i + 1);
+                if (cellDate !== "Invalid Date") {
+                    //put all tasks for this date in the cell
+                    for (let j = 0; j < tasks.length; j++) {
+                        let taskDate = new Date(tasks[j].date);
+                        if (cellDate.getDate() === taskDate.getDate()) { // this task is for this cell
+                            cellTasks[i].push(tasks[j]);
+                            tasks.splice(j--, 1);
+                        }
                     }
                 }
             }
-        }
 
-        //generate html (fill cells)
-        for(let i = 0; i < 35; i++){
-            if(cellTasks[i].length === 0){ // no tasks for this cell
-                if(i + 1 > currentMonthDays){
-                    cells[i] = 
-                    <div key={i} className={`item ${this.getClassBy(i + 1)}`}>
-                        <p className="date-e">{i + 1}</p>
-                    </div>;
+            for(let i = 0; i < 35;i++){
+                if(i + 1 > this.currentMonthDays){
+                    cells[i] = <TaskCell
+                            getClassBy={this.getClassBy}
+                            key={i + "fetched"} 
+                            index={i} />
                 }
                 else{
-                    let empty = [];
-                    for(let j = 0; j < 19 - cellTasks[i].length;j++){
-                        empty.push(
-                            <div key={j} className="empty"></div>
-                        );
-                    }
-                    cells[i] = <TaskCell addTask={this.addTask} getClassBy={this.getClassBy} key={i} keyI={i} empty={empty}/>
+                cells[i] = <TaskCell
+                            getClassBy={this.getClassBy}
+                            key={i + "fetched"} 
+                            index={i}
+                            tasks={cellTasks[i]} />
                 }
             }
+            
+            this.props.setCells(cells);
+        });
+    }
 
+    generateCells(){
+        let cells = [];
+
+        //generate template html
+        for (let i = 0; i < 35; i++) {
+            if(i + 1 > this.currentMonthDays){
+                cells[i] = <TaskCell
+                        getClassBy={this.getClassBy}
+                        key={i} 
+                        index={i} />
+            }
             else{
-                let currentTasks = [];
-                let moreTasks = [];
-                for(let j = 0; j < cellTasks[i].length;j++){
-                    if(j < 18)
-                    currentTasks.push(
-                        <Task key={j} task={cellTasks[i][j]}/>
-                    );
-                    else{
-                        moreTasks.push(
-                            <Task key={j} task={cellTasks[i][j]}/>
-                        );
-                    }
-                }
-
-                let empty = [];
-                for(let j = 0; j < 19 - cellTasks[i].length;j++){
-                    empty.push(
-                        <div key={j} className="empty"></div>
-                    );
-                }
-
-                cells[i] = <TaskCell addTask={this.addTask} getClassBy={this.getClassBy} key={i} keyI={i} tasks={currentTasks} empty={empty} moreTasks={moreTasks}/>
-            }
-        }
-        return cells;
-    }
-
-    async fetchSingleCell(year,month,day){
-        //get all of the tasks
-        let res = await TaskHandler.getTask(year,month,day,this.props.cookies.get("token"));
-
-        let tasks = res.tasks;
-
-        let currentTasks = [];
-        let moreTasks = [];
-        for (let j = 0; j < tasks.length; j++) {
-            if (j < 18)
-                currentTasks.push(
-                    <Task key={j} task={tasks[j]} />
-                );
-            else {
-                moreTasks.push(
-                    <Task key={j} task={tasks[j]} />
-                );
+            cells[i] = <TaskCell
+                        getClassBy={this.getClassBy}
+                        key={i} 
+                        index={i}
+                        tasks={[]} />
             }
         }
 
-        let empty = [];
-        for (let j = 0; j < 19 - tasks.length; j++) {
-            empty.push(
-                <div key={j} className="empty"></div>
-            );
-        }
-
-        let cell = 
-                <TaskCell 
-                addTask={this.addTask} 
-                getClassBy={this.getClassBy} 
-                key={day} 
-                keyI={day} 
-                tasks={currentTasks} 
-                empty={empty} 
-                moreTasks={moreTasks}/>
-
-        return cell;
-    }
-
-    async componentDidMount(){
-        let cells = this.props.preCells || await this.generateCells();
-        if(this.props.modifiedCell){
-           this.fetchSingleCell(this.props.year,this.props.month - 1,this.props.modifiedCell);
-        }
-        this.setState({cells});
+        this.props.setCells(cells);
     }
 
     render() {
         return (
             <div id="grid">
                 {this.generateWeekdays()}
-                {this.state.cells}
+                {this.props.cells}
             </div>
         );
     }
 }
 
-export default ScheduleGrid;
+const mapStateToProps = (state) => {
+    return {
+        year: state.schedule.year,
+        month: state.schedule.month,
+        cells: state.schedule.cells,
+        fetched: state.schedule.fetched
+    }
+}
+
+export default connect(mapStateToProps,{setCells})(ScheduleGrid);

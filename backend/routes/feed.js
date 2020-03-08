@@ -111,7 +111,7 @@ async function createTask(req, res, next) {
         })
     }
 
-    await new Task({
+    let task = await new Task({
         //pass the req.values to the scheme
         importantcyLevel: req.body.importantcyLevel,
         description: req.body.description,
@@ -121,7 +121,8 @@ async function createTask(req, res, next) {
 
     return res.status(200).json({
         success: true,
-        message: "Task created."
+        message: "Task created.",
+        task: task
     })
 }
 
