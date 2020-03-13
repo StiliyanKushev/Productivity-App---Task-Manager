@@ -8,7 +8,12 @@ class AppHeader extends Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            listItemCss:{},
+        }
+
         this.handleLinkClick = this.handleLinkClick.bind(this);
+        this.applyListItemCss = this.applyListItemCss.bind(this);
     }
 
     handleLinkClick(e) {
@@ -20,6 +25,14 @@ class AppHeader extends Component {
         this.forceUpdate();
     }
 
+    applyListItemCss(b){
+        let s = {};
+        if(b) {this.setState({listItemCss:s});return;}
+        if(!document.getElementById("nav-checkbox").checked) s = {width: document.body.clientWidth + "px"}
+        if(document.getElementById("nav-checkbox").checked) s = {};
+        this.setState({listItemCss:s});
+    }
+
     uncheckCheckbox() {
         document.getElementById("nav-checkbox").checked = false;
     };
@@ -27,6 +40,7 @@ class AppHeader extends Component {
     componentDidMount() {
         this.setState(this.state);
         window.addEventListener('resize', this.uncheckCheckbox);
+        window.addEventListener('resize', () => this.applyListItemCss(true));
         this.uncheckCheckbox();
     }
 
@@ -40,7 +54,7 @@ class AppHeader extends Component {
         for(let name in this.props.nav.list){
             let route = this.props.nav.list[name];
             let item =
-            <li key={name} className={name === this.props.nav.current ? 'current' : ''}>
+            <li style={this.state.listItemCss} key={name} className={name === this.props.nav.current ? 'current' : ''}>
             <Link to={route} onClick={this.handleLinkClick}>{name}</Link></li>;
             
             list.push(item);
@@ -49,7 +63,7 @@ class AppHeader extends Component {
         return (
             <header id="site-header">
                 <input type="checkbox" name="nav-checkbox" id="nav-checkbox"></input>
-                <label id="bars" name="bars" htmlFor="nav-checkbox">
+                <label onClick={this.applyListItemCss} id="bars" name="bars" htmlFor="nav-checkbox">
                     <div className="bar bar1"></div>
                     <div className="bar bar2"></div>
                     <div className="bar bar3"></div>

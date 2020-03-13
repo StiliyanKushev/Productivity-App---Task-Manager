@@ -12,7 +12,6 @@ class ScheduleGrid extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {cells:[]};
         this.classifiedCells = this.classifyCells();
 
         this.classifyCells = this.classifyCells.bind(this);
@@ -146,14 +145,16 @@ class ScheduleGrid extends Component {
                     cells[i] = <TaskCell
                             getClassBy={this.getClassBy}
                             key={i + "fetched"} 
-                            index={i} />
+                            index={i}
+                            cookies={this.props.cookies} />
                 }
                 else{
                 cells[i] = <TaskCell
                             getClassBy={this.getClassBy}
                             key={i + "fetched"} 
                             index={i}
-                            tasks={cellTasks[i]} />
+                            tasks={cellTasks[i]}
+                            cookies={this.props.cookies} />
                 }
             }
             
@@ -194,7 +195,7 @@ class ScheduleGrid extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
+const mapStateToProps = (state) => { 
     return {
         year: state.schedule.year,
         month: state.schedule.month,

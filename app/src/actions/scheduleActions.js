@@ -25,9 +25,27 @@ const confirmCreated = () => {
     }
 }
 
+const confirmDeleted = () => {
+    return {
+        type: "CONFIRM_SCHEDULE_TASK_FROM_CELL_DELETED"
+    }
+}
+
+const removeTaskFromCell = (cellIndex,taskIndex) => {
+    return {
+        type: "REMOVE_SCHEDULE_TASK_FROM_CELL",
+        payload: {
+            cellIndex,
+            taskIndex
+        }
+    }
+}
+
 export {
     setDay,
     setCells,
     addTaskToCell,
-    confirmCreated
+    confirmCreated,
+    removeTaskFromCell,
+    confirmDeleted
 };

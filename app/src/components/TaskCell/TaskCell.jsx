@@ -2,7 +2,7 @@ import React from "react";
 import { Component } from "react";
 import Task from '../../components/Task/Task';
 import { connect } from "react-redux";
-import {setDay,confirmCreated} from '../../actions/scheduleActions';
+import {setDay,confirmCreated,removeTaskFromCell,confirmDeleted} from '../../actions/scheduleActions';
 
 class TaskCell extends Component{
     constructor(props){
@@ -17,6 +17,11 @@ class TaskCell extends Component{
         };
 
         this.handleAddTask = this.handleAddTask.bind(this);
+        this.removeTaskFromCell = this.removeTaskFromCell.bind(this);
+    }
+    
+    removeTaskFromCell(index){
+        this.props.removeTaskFromCell(this.state.index,index);
     }
 
     handleAddTask(){
@@ -30,11 +35,11 @@ class TaskCell extends Component{
         for (let j = 0; j < this.state.tasks.length; j++) {
             if (j < 18)
                 currentTasks.push(
-                    <Task key={j} task={this.state.tasks[j]} />
+                    <Task cookies={this.props.cookies} removeTaskFromCell={this.removeTaskFromCell} index={j} key={j} task={this.state.tasks[j]} />
                 );
             else {
                 moreTasks.push(
-                    <Task key={j} task={this.state.tasks[j]} />
+                    <Task cookies={this.props.cookies} removeTaskFromCell={this.removeTaskFromCell} index={j} key={j} task={this.state.tasks[j]} />
                 );
             }
         }
@@ -44,11 +49,18 @@ class TaskCell extends Component{
             );
         }
 
+        //reset the tasks and then reinitialize them
         this.setState({
-            tasksHtml:currentTasks,
-            empty:empty,
-            moreTasks: moreTasks
-        });
+            tasksHtml:[],
+            empty:[],
+            moreTasks:[],
+        },() => {
+            this.setState({
+                tasksHtml:currentTasks,
+                empty:empty,
+                moreTasks: moreTasks
+            });
+        })
     }
 
     componentDidMount(){
@@ -61,6 +73,10 @@ class TaskCell extends Component{
         if(nextProps.created.index === this.state.index && this.state.tasks){
             this.generateTasksHtml();
             this.props.confirmCreated();
+        }
+        else if(nextProps.deleted.cellIndex === this.state.index && this.state.tasks){
+            this.generateTasksHtml();
+            this.props.confirmDeleted();
         }
     }
 
@@ -85,7 +101,8 @@ class TaskCell extends Component{
 const mapStateToProps = (state) => {
     return {
         created: state.schedule.created,
+        deleted: state.schedule.deleted,
     }
 }
 
-export default connect(mapStateToProps,{setDay,confirmCreated})(TaskCell);
+export default connect(mapStateToProps,{setDay,confirmCreated,removeTaskFromCell,confirmDeleted})(TaskCell);

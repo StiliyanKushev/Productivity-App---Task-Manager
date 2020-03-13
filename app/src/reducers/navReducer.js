@@ -1,6 +1,8 @@
 function getCurrent(){
     let path = window.location.pathname;
 
+    if(path === "/logout" || path === "/login" || path === "/register") return "Home";
+
     let fromGuestList = getKeyByValue(guestNavState.list,path);
     let fromAuthList = getKeyByValue(authNavState.list,path);
 

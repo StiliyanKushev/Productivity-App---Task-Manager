@@ -50,11 +50,25 @@ async function createTask(date,importantcyLevel,description,token){
     return res;
 }
 
+async function deleteTask(id,token){
+    const raw = await fetch(`http://192.168.1.132:8080/feed/tasks/delete/${id}`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'token': token
+        },
+    });
+
+    let res = await raw.json();
+    return res;
+}
 
 const TaskHandler = {
     getTasks,
     getTask,
     createTask,
+    deleteTask,
 };
 
 export default TaskHandler;

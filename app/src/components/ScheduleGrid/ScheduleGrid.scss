@@ -96,9 +96,9 @@
                 grid-column-gap: 5px;
                 grid-row-gap: 5px;
                 
-                div{
+                & > div{
                 cursor: pointer;
-                border-radius:4rem;
+                border-radius:50%;
                 border:1px solid white;
                 box-shadow: inset 0px 4px 4px 0px rgba(0,0,0,0.25);
                 }
@@ -125,22 +125,23 @@
                 }
                 }
                 
-                .add-new{
-                color:white;
-                
-                display:flex;
-                justify-content:center;
-                align-items:center;
-                
-                p{
-                    font-family: "Muli";
-                    position:absolute;
-                    margin:0rem;
-                    padding:0rem;
-                    font-size: 1.2em;
-                    font-weight:400;
-                    text-align:center;
-                }
+                .add-new {
+                    color: white;
+
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    p {
+                        font-family: "Muli";
+                        position: absolute;
+                        margin: 0rem;
+                        padding: 0rem;
+                        font-size: 1.2em;
+                        font-weight: 400;
+                        text-align: center;
+                        z-index: -1;
+                    }
                 }
                 
                 .red{

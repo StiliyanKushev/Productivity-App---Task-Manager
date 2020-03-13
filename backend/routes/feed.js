@@ -17,9 +17,9 @@ function validate(payload) {
         errors.importantcyLevel = 'importantcy Level is invalid or not given. Must be >= 1 and <= 3'
     }
 
-    if (!payload || typeof payload.description !== 'string' || payload.description.trim().length < 5 || payload.description.trim().length > 50) {
+    if (!payload || typeof payload.description !== 'string' || payload.description.trim().length < 5 || payload.description.trim().length > 250) {
         isFormValid = false
-        errors.description = 'description must be at least 5 chars long and 50 at most'
+        errors.description = 'description must be at least 5 chars long and 250 at most'
     }
 
     return {
@@ -126,10 +126,28 @@ async function createTask(req, res, next) {
     })
 }
 
+function deleteTask(req, res, next) {
+    Task.findByIdAndRemove(req.params.id).exec().then(task => {
+        res
+            .status(200)
+            .json({
+                success:true,
+                message: 'Deleted task successfully.',
+                task
+            });
+    })
+    .catch((error) => {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    });;
+}
+
 router.post("/tasks/get/:year/:month/:day",authCheck, getTaskCell);
 router.post("/tasks/get/:year/:month",authCheck, getTasks);
 router.post("/tasks/create",authCheck, createTask);
-// router.post("/tasks/remove/:id", authCheck, removeTask);
+router.post("/tasks/delete/:id", authCheck, deleteTask);
 // router.post("/tasks/edit/:id", authCheck, editTask);
 
 module.exports = router;

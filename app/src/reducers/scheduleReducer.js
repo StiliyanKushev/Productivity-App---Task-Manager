@@ -6,6 +6,10 @@ const initialState = {
     cells:[],
     created:{
         index: -1,
+    },
+    deleted:{
+        cellIndex: -1,
+        taskIndex: -1,
     }
 }
 
@@ -30,6 +34,24 @@ const scheduleReducer = (state = initialState, action) => {
                 task:null
             }};
         }
+        case "REMOVE_SCHEDULE_TASK_FROM_CELL":{
+            let cells = state.cells;
+            if(state.cells[action.payload.cellIndex].props.tasks){
+                cells = [...state.cells];
+                cells[action.payload.cellIndex].props.tasks.splice(action.payload.taskIndex,1);
+            }
+            return {...state,cells,deleted:{
+                cellIndex: action.payload.cellIndex,
+                taskIndex: action.payload.taskIndex
+            }};
+        }
+        case "CONFIRM_SCHEDULE_TASK_FROM_CELL_DELETED":{
+            return {...state,deleted:{
+                cellIndex: -1,
+                taskIndex: -1,
+            }};
+        }
+        
         default: {
             return {...state};
         }

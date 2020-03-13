@@ -1,0 +1,92 @@
+#menuTask{
+    position: absolute;
+    background: #252930;
+    padding: 0rem 2rem;
+    padding-top: 1rem;
+    box-shadow: 10px 10px 101px 35px rgba(0,0,0,0.23);
+    margin-left: -1.7rem;
+    margin-top: 2.5rem;
+    z-index: 10;
+    cursor: initial;
+    textarea{
+        background: none;
+        color: white;
+        font-size: 1rem;
+        border: none;
+        outline: none;
+        resize: none;
+        z-index: 10;
+        position: relative;
+    }
+
+    div{
+        margin: .7rem 0rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        button{
+            width: 40%;
+            background: none;
+            color: white;
+            border: 1px solid white;
+            border-radius: .3rem;
+            padding: .3rem 0rem;
+            font-size: 1.24rem;
+            position: relative;
+            z-index: 11;
+            cursor: pointer;
+        }
+
+        #edit{
+            background: #363A41;
+        }
+
+        #delete{
+            background: #463C42;
+        }
+    }
+
+    & > button{
+        width: 100%;
+        background: #8A3A3A;
+        color: white;
+        border: 1px solid white;
+        border-radius: .3rem;
+        padding: .3rem 0rem;
+        font-size: 1rem;
+        cursor: pointer;
+        margin-bottom: 1rem;
+        position: relative;
+        z-index: 11;
+    }
+}
+
+#menuTask::before{
+    content: '';
+    background: #252930;
+    position: absolute;
+    width: 3rem;
+    height: 3rem;
+
+    left: .6rem;
+    top: -1.5rem;
+
+    transform: rotate(45deg);
+}
+
+.leftPointing{
+    margin-left: -18.64rem !important;
+}
+
+.leftPointing::before{
+    left: initial !important;
+    right: .6rem;
+}
+
+.topPointing{
+    margin-top: -18.7rem !important;
+}
+
+.topPointing::before{
+    top: 15.6rem !important;
+}
