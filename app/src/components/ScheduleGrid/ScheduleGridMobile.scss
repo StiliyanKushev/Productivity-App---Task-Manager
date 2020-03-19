@@ -1,0 +1,111 @@
+#mobile-grid{
+  margin-top: 11rem;
+  width:100%;
+  height:100%;
+  background:#0554F2;
+  padding:1rem;
+  
+  // .edge-t{
+  //   border-top: none !important;
+  // }
+  .edge-b{
+    border-bottom: none !important;
+  }
+  
+  .current{
+    background: rgba(255,255,255,0.24);
+  }
+
+  .row{
+    // border-top:1px solid white;
+    border-bottom:1px solid white;
+    display: grid;
+    grid-template-columns: 3rem minmax(35px,4fr) 3rem;
+    grid-template-rows: 3rem;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+  
+    color:white;
+    font-family: 'Muli', sans-serif;
+    
+    &-date{
+      border-right: 1px solid white;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      font-weight:100;
+      .date{
+        text-align:right;
+        font-size:.7rem;
+        padding:0;
+        margin:0;
+        padding-right:.3rem;
+        width:100%;
+        span{
+          text-align:right;
+          font-size:1.5em;
+        }
+      }
+    }
+    
+    &-tasks{
+      padding:6px;
+      
+      display: grid;
+      grid-template-columns: repeat(9, 25px);
+      grid-template-rows: 25px;
+      grid-column-gap: 15px;
+      grid-row-gap: 0px;
+      
+      .task{
+        padding-top: 70%;
+        border: 1px solid white;
+        border-radius:100%;
+        box-shadow: inset 0px 4px 4px 0px rgba(0,0,0,0.25);
+        cursor:pointer;
+      }
+      
+      .red{
+        background:#F33B1F;
+        box-shadow: inset 0px 4px 4px 0px rgba(0,0,0,.7);
+      }
+      .blue{
+        background:#00BBFF;
+      }
+      .yellow{
+        background:#FFC300;
+      }
+      
+      p{
+        margin-top: 0.2rem;
+        padding:0;
+        font-size:1.1rem;
+      }
+    }
+    
+    &-add{
+      border-left: 1px solid white;
+      padding:6px;
+      
+      .container-add{
+        cursor:pointer;
+        background:none;
+        height:100%;
+        border-radius: 50%;
+        border: 1px solid white;
+        box-sizing:border-box;
+        
+        p{
+          margin:0;
+          margin-top: -.6rem;
+          padding:0;
+          width:100%;
+          height:100%;
+          font-weight:100;
+          text-align:center;
+          font-size: 1.8rem;
+        }
+      }
+    }
+  }
+}

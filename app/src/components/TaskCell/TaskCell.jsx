@@ -2,7 +2,7 @@ import React from "react";
 import { Component } from "react";
 import Task from '../../components/Task/Task';
 import { connect } from "react-redux";
-import {setDay,confirmCreated,removeTaskFromCell,confirmDeleted} from '../../actions/scheduleActions';
+import {setDay,confirmCreated,removeTaskFromCell,editTaskFromCell,confirmDeleted,confirmEdited} from '../../actions/scheduleActions';
 
 class TaskCell extends Component{
     constructor(props){
@@ -18,10 +18,16 @@ class TaskCell extends Component{
 
         this.handleAddTask = this.handleAddTask.bind(this);
         this.removeTaskFromCell = this.removeTaskFromCell.bind(this);
+        this.editTaskFromCell = this.editTaskFromCell.bind(this);
+
     }
     
     removeTaskFromCell(index){
         this.props.removeTaskFromCell(this.state.index,index);
+    }
+
+    editTaskFromCell(newData,index){
+        this.props.editTaskFromCell(newData,this.state.index,index);
     }
 
     handleAddTask(){
@@ -35,11 +41,11 @@ class TaskCell extends Component{
         for (let j = 0; j < this.state.tasks.length; j++) {
             if (j < 18)
                 currentTasks.push(
-                    <Task cookies={this.props.cookies} removeTaskFromCell={this.removeTaskFromCell} index={j} key={j} task={this.state.tasks[j]} />
+                    <Task cookies={this.props.cookies} editTaskFromCell={this.editTaskFromCell} removeTaskFromCell={this.removeTaskFromCell} index={j} key={j} task={this.state.tasks[j]} />
                 );
             else {
                 moreTasks.push(
-                    <Task cookies={this.props.cookies} removeTaskFromCell={this.removeTaskFromCell} index={j} key={j} task={this.state.tasks[j]} />
+                    <Task cookies={this.props.cookies} editTaskFromCell={this.editTaskFromCell} removeTaskFromCell={this.removeTaskFromCell} index={j} key={j} task={this.state.tasks[j]} />
                 );
             }
         }
@@ -78,6 +84,10 @@ class TaskCell extends Component{
             this.generateTasksHtml();
             this.props.confirmDeleted();
         }
+        else if(nextProps.edited.cellIndex === this.state.index && this.state.tasks){
+            this.generateTasksHtml();
+            this.props.confirmEdited();
+        }
     }
 
     render(){
@@ -102,7 +112,8 @@ const mapStateToProps = (state) => {
     return {
         created: state.schedule.created,
         deleted: state.schedule.deleted,
+        edited: state.schedule.edited,
     }
 }
 
-export default connect(mapStateToProps,{setDay,confirmCreated,removeTaskFromCell,confirmDeleted})(TaskCell);
+export default connect(mapStateToProps,{setDay,confirmCreated,editTaskFromCell,removeTaskFromCell,confirmDeleted,confirmEdited})(TaskCell);

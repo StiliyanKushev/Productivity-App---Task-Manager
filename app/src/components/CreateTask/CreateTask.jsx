@@ -59,8 +59,15 @@ class CreateTask extends Component{
 
         if(res.success){
             toast.success(res.message);
-            //update the global state
-            this.props.addTaskToCell(this.props.day - 1,res.task); // index, task
+            if(this.props.fullscreen){  // mobile
+                //update the global state
+                this.props.addTaskToCell(this.props.day - 1,res.task); // index, task
+            }
+            else{ //desktop
+                //update the global state
+                this.props.addTaskToCell(this.props.day - 1,res.task); // index, task
+            }
+            
 
             this.closeSelf();
         }
@@ -94,7 +101,7 @@ class CreateTask extends Component{
 
     render(){
         return (
-            <div id="create-task-menu" style={{display: this.state.visible ? "initial" : "none"}}>
+            <div id="create-task-menu" className={this.props.fullscreen ? "mobile-full" : ""} style={{display: this.state.visible ? "initial" : "none"}}>
                 <div id="content">
                     <p id="date">Date: <span>{this.generateDate()}</span></p>
                     <div id="variants">

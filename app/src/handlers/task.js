@@ -64,11 +64,29 @@ async function deleteTask(id,token){
     return res;
 }
 
+async function editTask(newDescription,id,token){
+    const raw = await fetch(`http://192.168.1.132:8080/feed/tasks/edit/${id}`, {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'token': token
+        },
+        body: JSON.stringify({
+            description: newDescription
+        })
+    });
+
+    let res = await raw.json();
+    return res;
+}
+
 const TaskHandler = {
     getTasks,
     getTask,
     createTask,
     deleteTask,
+    editTask
 };
 
 export default TaskHandler;

@@ -54,7 +54,7 @@
 
 @mixin include-header($type){ // mobile or desktop
     @if $type == "desktop"{
-        padding-left: calc(14rem);
+        padding-left: calc(12rem + 3rem);
     }
     @else if $type == "mobile"{
         padding-top: 6rem;

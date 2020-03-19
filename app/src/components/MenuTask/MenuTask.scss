@@ -75,7 +75,7 @@
 }
 
 .leftPointing{
-    margin-left: -18.64rem !important;
+    margin-left: -17.90rem !important;
 }
 
 .leftPointing::before{
@@ -88,5 +88,33 @@
 }
 
 .topPointing::before{
-    top: 15.6rem !important;
+    top: 15.4rem !important;
+}
+
+@media screen and (min-width:1400px){
+    #menuTask{
+        textarea{
+            font-size: 1.3rem !important;
+        }
+
+        div button{
+            font-size: 1.4rem !important;
+        }
+
+        & > button{
+            font-size: 1.3rem !important;
+        }
+    }
+
+    .leftPointing{
+        margin-left: -22.7rem !important;
+    }
+
+    .topPointing{
+        margin-top: -21.8rem !important;
+    }
+    
+    .topPointing::before{
+        top: 18.9rem !important;
+    }
 }

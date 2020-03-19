@@ -60,12 +60,43 @@
     }
 }
 
-@media screen and (max-height:500px){
-    @include set-header-mobile();
+// @media screen and (max-height:500px){
+//     @include set-header-mobile();
 
-    #site-content{
-        div{
-            @include exclude-header("mobile");
+//     #site-content{
+//         div{
+//             @include exclude-header("mobile");
+//         }
+//     }
+// }
+
+
+@media screen and (min-width:1400px){
+    #site-header{
+        background-image: url(../../assets/headerMedium.svg);
+        width: 18rem;
+
+        #logo{
+            background-image: url(../../assets/logoMedium.svg);
+            width: 16rem;
+        
+            p{
+                font-size: 2.3rem;
+                top:1.8rem;
+                left: 1rem;
+            }
+        }
+
+        nav{
+            height: 34rem;
+
+            ul li{
+                width: 16.5rem;
+
+                a{
+                    font-size: 23px;
+                }
+            }
         }
     }
 }

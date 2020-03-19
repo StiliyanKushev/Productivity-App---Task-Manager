@@ -112,9 +112,16 @@ class ScheduleGrid extends Component {
         }
     }
 
+    componentWillReceiveProps(newProps){
+        this.currentMonthDays = new Date(this.props.year,this.props.month,0).getDate();
+        if(this.props.year !== newProps.year || this.props.month !== newProps.month){
+            this.generateCells();   // render the empty grid
+            this.fetchCells(newProps.year,newProps.month);      // render the fetched grid when cells are fetched
+        }
+    }
 
-    fetchCells(){
-        TaskHandler.getTasks(this.props.year,this.props.month,this.props.cookies.get("token"))
+    fetchCells(y,m){
+        TaskHandler.getTasks(y || this.props.year,m || this.props.month,this.props.cookies.get("token"))
         .then(res => {
             let tasks = res.tasks;
             let cellTasks = [];

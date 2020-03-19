@@ -6,7 +6,28 @@
         @include view-fullscreen(1);
         margin-top: 0rem;
         display: flex;
-        justify-content: center;
+        justify-content: space-evenly;
         align-items: center;
+    }
+}
+
+@media screen and (max-width:640px){
+    #schedule-view{
+        @include include-header("mobile");
+        @include exclude-header("mobile");
+    }
+}
+
+@media screen and (max-width:1090px){
+    #schedule-view{
+        height:fit-content !important;
+        justify-content: center !important;
+        flex-direction: column;
+    }
+}
+
+@media screen and (min-width:1400px){
+    #schedule-view{
+        padding-left: 16rem !important;
     }
 }

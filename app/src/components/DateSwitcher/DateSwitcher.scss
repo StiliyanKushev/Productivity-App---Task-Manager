@@ -1,0 +1,99 @@
+#date-switcher{
+    height: fit-content;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    .container > p{
+        font-size: 3.5rem;
+    }
+
+    #month{
+        margin-top: 2rem;
+    }
+
+    .switch{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .left,.right{
+        border: solid white;
+        border-width: 0 1px 1px 0;
+        display: inline-block;
+        padding: 6px;
+        background: none;
+        outline: none;
+        cursor: pointer;
+    }
+
+    .left{
+        transform: rotate(135deg);
+    }
+    .right{
+        transform: rotate(-45deg);
+    }
+    
+    .value{
+        font-size: 1.8rem;
+        margin: 0rem .6rem;
+    }
+}
+
+@media screen and (max-width:1090px){
+    #date-switcher{
+        background:#0554F2;
+        border-bottom:1px solid rgba(255,255,255,0.5);
+        //background: #044BD9;
+        position: fixed;
+        -webkit-backface-visibility: hidden;
+        width: 100%;
+        top:0rem;
+        padding-bottom: 1.3rem;
+        padding-top:1.3rem;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        #month{
+            margin-top: 0rem;
+        }
+        .switch{
+            width: fit-content;
+        }
+        .container{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .container:nth-child(2){
+            margin-left: 2rem;
+        }
+    }
+}
+
+@media screen and (max-width: 640px){
+    #date-switcher{
+        margin-top: 4rem;
+        padding-top: 2rem;
+    }
+}
+
+@media screen and (min-width:1400px){
+    #date-switcher{
+        & > p{
+            font-size: 5rem !important;
+        }
+
+        .left,.right{
+            border: solid white;
+            border-width: 0 1px 1px 0;
+            display: inline-block;
+            padding: 10px;
+        }
+
+        .value{
+            font-size: 2.5rem !important;
+        }
+    }
+}

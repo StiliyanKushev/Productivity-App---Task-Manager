@@ -1,6 +1,7 @@
 #site-content{
     #schedule-view{
         #grid{
+            height: fit-content;
             display: grid;
             grid-template-columns: repeat(7, 9rem);
             grid-template-rows: 1fr repeat(5, 9rem);
@@ -156,6 +157,31 @@
                 background:#FFC300;
                 }
             }
+            }
+        }
+    }
+}
+
+
+@media screen and (min-width:1400px){
+    #schedule-view{
+        #grid{
+            grid-template-columns: repeat(7, 11rem) !important;
+            grid-template-rows: 1fr repeat(5, 11rem) !important;
+            
+            & > p{
+                font-size: 1.6rem !important;
+            }
+
+            .item{
+                .date{
+                    font-size: 1.4rem !important;
+                }
+            }
+
+            .add-new p{
+                font-size: 1.5rem !important;
+                margin-top: -.1rem !important;
             }
         }
     }

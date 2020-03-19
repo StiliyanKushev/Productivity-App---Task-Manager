@@ -28,9 +28,19 @@ class Task extends Component{
         this.setState({menuVisible:false});
     }
 
-    handleEdit(e){
+    async handleEdit(e,newDesc){
         e.stopPropagation(); //do not call handle Click
-        this.setState({menuVisible:false});
+        let res = await TaskHandler.editTask(newDesc,this.state.id,this.props.cookies.get("token"));
+        if(res.success){
+            toast.success(res.message);
+            //update the global state
+            this.setState({menuVisible:false},() => {
+                this.props.editTaskFromCell({description:newDesc},this.state.index);
+            });
+        }
+        else{
+            toast.error("The task no longer exists.");
+        }
     }
 
     async handleDelete(e){

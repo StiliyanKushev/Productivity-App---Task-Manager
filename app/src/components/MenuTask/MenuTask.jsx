@@ -24,6 +24,10 @@ class MenuTask extends Component {
     }
 
     componentDidUpdate(){
+        if(this.props.visible && this.state.reset){
+            this.setState({reset:false});
+        }
+
         let menuPos = ReactDOM.findDOMNode(this).getBoundingClientRect();
         if(window.innerWidth < menuPos.right && !this.state.updated){
             this.setState({pointing: "leftPointing",updated:true});
@@ -43,7 +47,7 @@ class MenuTask extends Component {
             <div id="menuTask" className={this.state.pointing || ''} style={{display: this.props.visible ? "initial" : "none",...this.state.topPointingStyle}}>
                 <textarea cols={30} rows={7} value={this.state.description} onChange={this.handleChange}/>
                 <div>
-                    <button id="edit" onClick={this.props.handleEdit}>Edit</button>
+                    <button id="edit" onClick={(e) => this.props.handleEdit(e,this.state.description)}>Edit</button>
                     <button id="delete" onClick={this.props.handleDelete}>Delete</button>
                 </div>
                 <button id="cancel" onClick={this.props.handleClose}>Cancel</button>

@@ -47,3 +47,23 @@
         }
     }
 }
+
+
+@media screen and (min-width:1400px){
+    .react-form{
+        input{
+            font-size: 1.7rem !important;
+        }
+
+        #submit{
+            font-size: 2rem !important;
+
+            padding: .9rem 0rem !important;
+            padding-bottom: 1rem !important;
+        }
+
+        #suggest-link{
+            font-size: 1.5rem !important;
+        }
+    }
+}

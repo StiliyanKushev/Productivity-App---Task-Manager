@@ -28,6 +28,26 @@ function validate(payload) {
     }
 }
 
+function validateEditForm(payload) {
+    const errors = {};
+    let isFormValid = true;
+
+    // if (!payload || typeof Number(payload.importantcyLevel) !== 'number' || Number(payload.importantcyLevel) < 1 || Number(payload.importantcyLevel) > 3) {
+    //     isFormValid = false
+    //     errors.importantcyLevel = 'importantcy Level is invalid or not given. Must be >= 1 and <= 3'
+    // }
+
+    if (!payload || typeof payload.description !== 'string' || payload.description.trim().length < 5 || payload.description.trim().length > 250) {
+        isFormValid = false
+        errors.description = 'description must be at least 5 chars long and 250 at most'
+    }
+
+    return {
+        success: isFormValid,
+        errors
+    }
+}
+
 function getTaskCell(req, res, next) {
     let year = req.params.year;
     let month = req.params.month;
@@ -141,13 +161,40 @@ function deleteTask(req, res, next) {
             error.statusCode = 500;
         }
         next(error);
-    });;
+    });
+}
+
+function editTask(req, res, next) {
+    const validationResult = validateEditForm(req.body)
+    if (!validationResult.success) {
+        return res.status(200).json({
+            success: false,
+            errors: validationResult.errors
+        })
+    }
+    Task.findByIdAndUpdate(req.params.id,{
+        description: req.body.description
+    }).exec().then(task => {
+        res
+            .status(200)
+            .json({
+                success:true,
+                message: 'Edited task successfully.',
+                task
+            });
+    })
+    .catch((error) => {
+        if (!error.statusCode) {
+            error.statusCode = 500;
+        }
+        next(error);
+    });
 }
 
 router.post("/tasks/get/:year/:month/:day",authCheck, getTaskCell);
 router.post("/tasks/get/:year/:month",authCheck, getTasks);
 router.post("/tasks/create",authCheck, createTask);
 router.post("/tasks/delete/:id", authCheck, deleteTask);
-// router.post("/tasks/edit/:id", authCheck, editTask);
+router.post("/tasks/edit/:id", authCheck, editTask);
 
 module.exports = router;

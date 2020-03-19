@@ -1,3 +1,17 @@
+
+
+@media screen and (max-aspect-ratio: 13/9) {
+    #create-task-menu.mobile-full{
+        width:100vw;
+        height:100vh;
+        position: fixed;
+        top:0px;
+        left:0px;
+        right:0px;
+        bottom:0px;
+    }
+}
+
 #create-task-menu{
     background:#324977;
     padding:1.5rem 3.5rem;
@@ -109,4 +123,46 @@
             }
         }
     }   
+}
+
+
+@media screen and (min-width:1400px){
+    #create-task-menu{
+        #content{
+            #date{
+                font-size: 1.5rem !important;
+            }
+
+            #option{
+                p{
+                    font-size: 1.3rem !important;
+                }
+
+                div{
+                    width: 2.6rem !important;
+                    height: 2.6rem !important;
+                }
+
+                .current{
+                    width: 3rem !important;
+                    height: 3rem !important;
+                }
+            }
+
+            form{
+                textarea,textarea::placeholder{
+                    font-size: 1.4rem !important;
+                }
+
+                #submit{
+                    margin-bottom: 1.5rem !important;
+                    font-size: 1.7rem !important;
+                }
+
+                #cancel{
+                    font-size: 1.4rem !important;
+                }
+            }
+        }
+    }
 }
