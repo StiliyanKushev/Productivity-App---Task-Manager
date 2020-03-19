@@ -30,6 +30,7 @@ class ScheduleView extends Component {
     }
 
     render(){        
+        //TODO just add a "visible" prop to ScheduleGrid and ScheduleGridMobile (dont mount and unmount them everytime)!
         return (
             <div id="schedule-view">
                 <DateSwitcher/>

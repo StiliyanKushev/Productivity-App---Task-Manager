@@ -31,13 +31,10 @@ const scheduleReducer = (state = initialState, action) => {
             return {...state,day: action.payload};
         }
         case "ADD_SCHEDULE_TASK_TO_CELL":{
-            if(window.innerWidth > 1090){ //desktop
-                if(state.cells[action.payload.index].props.tasks)
-                    state.cells[action.payload.index].props.tasks.push(action.payload.task);
-            }
-            else{
-                state.cellsMobile[action.payload.index].props.tasks.push(action.payload.task);
-            }
+            if(state.cells && state.cells[action.payload.index])
+            state.cells[action.payload.index].props.tasks.push(action.payload.task);
+            if(state.cellsMobile && state.cellsMobile[action.payload.index])
+            state.cellsMobile[action.payload.index].props.tasks.push(action.payload.task);
             return {...state,created:{
                 index: action.payload.index,
             }};
