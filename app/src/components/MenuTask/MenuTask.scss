@@ -1,4 +1,5 @@
-#menuTask{
+.menuTask,
+.rightPointing{
     position: absolute;
     background: #252930;
     padding: 0rem 2rem;
@@ -61,24 +62,32 @@
     }
 }
 
-#menuTask::before{
-    content: '';
+.menuTask .menu-arrow{
     background: #252930;
     position: absolute;
     width: 3rem;
     height: 3rem;
-
+    margin: 0 !important;
     left: .6rem;
     top: -1.5rem;
 
     transform: rotate(45deg);
 }
 
-.leftPointing{
-    margin-left: -17.90rem !important;
+.centered{
+    position: absolute !important;
+    margin-left: -9rem !important;
+
+    .menu-arrow{
+        margin-left: calc(50% - 2.5rem) !important;
+    }
 }
 
-.leftPointing::before{
+.leftPointing{
+    margin-left: -18rem !important;
+}
+
+.leftPointing .menu-arrow{
     left: initial !important;
     right: .6rem;
 }
@@ -87,12 +96,23 @@
     margin-top: -18.7rem !important;
 }
 
-.topPointing::before{
+.topPointing .menu-arrow{
     top: 15.4rem !important;
 }
 
+@media screen and (min-width:641px) and (max-width:1090px){
+    .menuTask{
+        margin-top: 1.5rem;
+        margin-left: -1.2rem;
+    }
+
+    .leftPointing{
+        margin-left: -18.3rem !important;
+    }
+}
+
 @media screen and (min-width:1400px){
-    #menuTask{
+    .menuTask{
         textarea{
             font-size: 1.3rem !important;
         }
@@ -114,7 +134,18 @@
         margin-top: -21.8rem !important;
     }
     
-    .topPointing::before{
+    .topPointing .menu-arrow{
         top: 18.9rem !important;
+    }
+}
+
+@media screen and (max-width:640px){
+    .menuTask{
+        margin-left: -1.2rem;
+        margin-top: 1.5rem !important;
+    }
+
+    .leftPointing{
+        margin-left: -220px !important;
     }
 }

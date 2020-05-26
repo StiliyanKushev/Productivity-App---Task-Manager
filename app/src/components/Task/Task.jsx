@@ -24,6 +24,7 @@ class Task extends Component{
     }
 
     handleClose(e){
+        if(e)
         e.stopPropagation(); //do not call handle Click
         this.setState({menuVisible:false});
     }
@@ -35,7 +36,7 @@ class Task extends Component{
             toast.success(res.message);
             //update the global state
             this.setState({menuVisible:false},() => {
-                this.props.editTaskFromCell({description:newDesc},this.state.index);
+                this.props.editTaskFromRedux({description:newDesc},this.state.index);
             });
         }
         else{
@@ -50,7 +51,7 @@ class Task extends Component{
             toast.success(res.message);
             //update the global state
             this.setState({menuVisible:false},() => {
-                this.props.removeTaskFromCell(this.state.index);
+                this.props.removeTaskFromRedux(this.state.index);
             });
         }
         else{
@@ -63,20 +64,32 @@ class Task extends Component{
     }
 
     render(){
-        let menu = <MenuTask handleEdit={this.handleEdit} handleDelete={this.handleDelete} handleClose={this.handleClose} visible={this.state.menuVisible} cookies={this.props.cookies} description={this.state.description} />
+        let menu = 
+        <MenuTask
+            id={this.state.id}
+            rowIndex={this.props.rowIndex}
+            isOnScroll={this.props.isOnScroll} 
+            handleEdit={this.handleEdit} 
+            handleDelete={this.handleDelete} 
+            handleClose={this.handleClose} 
+            visible={this.state.menuVisible} 
+            cookies={this.props.cookies} 
+            description={this.state.description}
+        />
+
         switch(this.state.importantcyLevel){
             default:{
-                return <div className="blue" onClick={this.handleClick}>{menu}</div>
+                return <div className={`blue ${this.props.isMobile ? 'task' : ''}`} onClick={this.handleClick}>{menu}</div>
             }
 
             case 1:{
-                return <div className="blue" onClick={this.handleClick}>{menu}</div>
+                return <div className={`blue ${this.props.isMobile ? 'task' : ''}`} onClick={this.handleClick}>{menu}</div>
             }
             case 2:{
-                return <div className="yellow" onClick={this.handleClick}>{menu}</div>
+                return <div className={`yellow ${this.props.isMobile ? 'task' : ''}`} onClick={this.handleClick}>{menu}</div>
             }
             case 3:{
-                return <div className="red" onClick={this.handleClick}>{menu}</div>
+                return <div className={`red ${this.props.isMobile ? 'task' : ''}`} onClick={this.handleClick}>{menu}</div>
             }
         }
     }

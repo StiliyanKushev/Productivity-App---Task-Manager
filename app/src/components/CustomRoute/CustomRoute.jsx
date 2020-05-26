@@ -5,7 +5,7 @@ const CustomRoute = function({component:Component,render,verification,redirectPa
     if(verification)
         return <Route {...rest} render={render}/>;
     else
-        return <Redirect to={redirectPath || "/"}/>
+        return <Redirect to={redirectPath || "/login"}/>
 }
 
 export default CustomRoute;

@@ -47,11 +47,16 @@ const scheduleReducer = (state = initialState, action) => {
         }
         case "REMOVE_SCHEDULE_TASK_FROM_CELL":{
             let cells = state.cells;
-            if(state.cells[action.payload.cellIndex].props.tasks){
+            let cellsMobile = state.cellsMobile;
+            if(state.cells.length > 0 && state.cells[action.payload.cellIndex].props.tasks){
                 cells = [...state.cells];
                 cells[action.payload.cellIndex].props.tasks.splice(action.payload.taskIndex,1);
             }
-            return {...state,cells,deleted:{
+            if(state.cellsMobile.length > 0 && state.cellsMobile[action.payload.cellIndex].props.tasks){
+                cellsMobile = [...state.cellsMobile];
+                cellsMobile[action.payload.cellIndex].props.tasks.splice(action.payload.taskIndex,1);
+            }
+            return {...state,cells,cellsMobile,deleted:{
                 cellIndex: action.payload.cellIndex,
                 taskIndex: action.payload.taskIndex
             }};
@@ -65,11 +70,16 @@ const scheduleReducer = (state = initialState, action) => {
 
         case "EDIT_SCHEDULE_TASK_FROM_CELL":{
             let cells = state.cells;
-            if(state.cells[action.payload.cellIndex].props.tasks){
+            let cellsMobile = state.cellsMobile;
+            if(state.cells.length > 0 && state.cells[action.payload.cellIndex].props.tasks){
                 cells = [...state.cells];
                 cells[action.payload.cellIndex].props.tasks[action.payload.taskIndex].description = action.payload.newData.description;
             }
-            return {...state,cells,edited:{
+            if(state.cellsMobile.length > 0 && state.cellsMobile[action.payload.cellIndex].props.tasks){
+                cellsMobile = [...state.cellsMobile];
+                cellsMobile[action.payload.cellIndex].props.tasks[action.payload.taskIndex].description = action.payload.newData.description;
+            }
+            return {...state,cells,cellsMobile,edited:{
                 cellIndex: action.payload.cellIndex,
                 taskIndex: action.payload.taskIndex
             }};

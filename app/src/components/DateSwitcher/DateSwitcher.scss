@@ -2,6 +2,7 @@
     height: fit-content;
     text-align: center;
     display: flex;
+    z-index:999;
     flex-direction: column;
     .container > p{
         font-size: 3.5rem;

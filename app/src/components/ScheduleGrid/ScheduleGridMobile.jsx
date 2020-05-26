@@ -54,6 +54,7 @@ class ScheduleGridMobile extends Component {
 
             for (let i = 0; i < this.currentMonthDays; i++) {
 				cells[i] = <TaskRow
+					cookies={this.props.cookies}
 					isLast={i + 1 === this.currentMonthDays}
 					key={i + "fetched"}
 					index={i}

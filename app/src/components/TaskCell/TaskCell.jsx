@@ -17,16 +17,16 @@ class TaskCell extends Component{
         };
 
         this.handleAddTask = this.handleAddTask.bind(this);
-        this.removeTaskFromCell = this.removeTaskFromCell.bind(this);
-        this.editTaskFromCell = this.editTaskFromCell.bind(this);
+        this.removeTask = this.removeTask.bind(this);
+        this.editTask = this.editTask.bind(this);
 
     }
     
-    removeTaskFromCell(index){
+    removeTask(index){
         this.props.removeTaskFromCell(this.state.index,index);
     }
 
-    editTaskFromCell(newData,index){
+    editTask(newData,index){
         this.props.editTaskFromCell(newData,this.state.index,index);
     }
 
@@ -41,11 +41,11 @@ class TaskCell extends Component{
         for (let j = 0; j < this.state.tasks.length; j++) {
             if (j < 18)
                 currentTasks.push(
-                    <Task cookies={this.props.cookies} editTaskFromCell={this.editTaskFromCell} removeTaskFromCell={this.removeTaskFromCell} index={j} key={j} task={this.state.tasks[j]} />
+                    <Task cookies={this.props.cookies} editTaskFromRedux={this.editTask} removeTaskFromRedux={this.removeTask} index={j} key={j} task={this.state.tasks[j]} />
                 );
             else {
                 moreTasks.push(
-                    <Task cookies={this.props.cookies} editTaskFromCell={this.editTaskFromCell} removeTaskFromCell={this.removeTaskFromCell} index={j} key={j} task={this.state.tasks[j]} />
+                    <Task cookies={this.props.cookies} editTaskFromRedux={this.editTask} removeTaskFromRedux={this.removeTask} index={j} key={j} task={this.state.tasks[j]} />
                 );
             }
         }

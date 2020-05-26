@@ -29,8 +29,8 @@ class AppContent extends Component{
                 <main id="site-content">
                     <Switch>
                         <Route exact path="/" render={(props) => <HomeView {...props} cookies={this.props.cookies}/>} />
-                        <CustomRoute exact path="/login" verification={!token} render={(props) => <LoginView {...props} cookies={this.props.cookies}/>} />
-                        <CustomRoute exact path="/register" verification={!token} render={(props) => <RegisterView {...props} cookies={this.props.cookies}/>} />
+                        <CustomRoute exact path="/login" verification={!token} redirectPath="/" render={(props) => <LoginView {...props} cookies={this.props.cookies}/>} />
+                        <CustomRoute exact path="/register" verification={!token} redirectPath="/" render={(props) => <RegisterView {...props} cookies={this.props.cookies}/>} />
                         <CustomRoute exact path="/logout" verification={token} render={(props) => <LogoutView {...props} cookies={this.props.cookies}/>} />
                         <CustomRoute exact path="/schedule" verification={token} render={(props) => <ScheduleView {...props} cookies={this.props.cookies} />} />
                         <CustomRoute exact path="/aboutme" verification={token} render={(props) => <AboutMeView {...props} cookies={this.props.cookies} />} />

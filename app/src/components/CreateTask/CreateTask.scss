@@ -9,6 +9,7 @@
         left:0px;
         right:0px;
         bottom:0px;
+        padding-top: 9rem;
     }
 }
 
@@ -16,7 +17,7 @@
     background:#324977;
     padding:1.5rem 3.5rem;
     border-radius:.5rem;
-    z-index:99;
+    z-index:1000;
 
     position:absolute;
 
@@ -125,6 +126,11 @@
     }   
 }
 
+@media screen and (max-width:1090px) and (min-width: 640px){
+    #create-task-menu{
+        padding-left: 14rem;
+    }
+}
 
 @media screen and (min-width:1400px){
     #create-task-menu{

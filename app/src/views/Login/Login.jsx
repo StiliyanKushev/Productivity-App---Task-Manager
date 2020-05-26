@@ -8,7 +8,7 @@ import FormHandler from '../../handlers/form';
 import './Login.scss';
 
 import { connect } from 'react-redux';
-import {setNavAuth} from '../../actions/navActions';
+import {setNavAuth,setCurrent} from '../../actions/navActions';
 
 class LoginView extends Component {
     constructor(props){
@@ -30,6 +30,10 @@ class LoginView extends Component {
         }
     }
 
+    componentDidMount(){
+        this.props.setCurrent('/login');
+    }
+
     render() {
         return (
             <div id="login-view">
@@ -48,4 +52,4 @@ class LoginView extends Component {
     }
 }
 
-export default connect(null,{setNavAuth})(LoginView);
+export default connect(null,{setNavAuth,setCurrent})(LoginView);

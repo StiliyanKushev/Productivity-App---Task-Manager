@@ -35,3 +35,7 @@ body{
         padding-right: $default-site-content-padding;
     }
 }
+
+div.Toastify__toast-container{
+    z-index: 99999;
+}
