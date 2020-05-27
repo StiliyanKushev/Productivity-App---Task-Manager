@@ -34,25 +34,27 @@ class MenuTask extends Component {
     componentDidMount() {
         window.addEventListener('resize', this.resetStyle);
 
-        let row = $(findDOMNode(this.refs.self)).parent().parent();
-        row.on('scroll',() => {
-            this.updateScrollPosition(row);
-        });
-    }
-
-    handleShow(){
-
+        if(this.props.isMobile){
+            let row = $(findDOMNode(this.refs.self)).parent().parent();
+            row.on('scroll',() => {
+                this.updateScrollPosition(row);
+            });
+        }
+        else{
+        }
     }
 
     fixFirstOpenPosition(){
-        if(this.fixedOpenPos) {
-            return;
-        }
+        if(this.props.isMobile){
+            if(this.fixedOpenPos) {
+                return;
+            }
 
-        let row = $(findDOMNode(this.refs.self)).parent().parent();
-        let currentPos = $(findDOMNode(this.refs.self)).offset();
-        $(findDOMNode(this.refs.self)).offset({left:currentPos.left - row.scrollLeft(),top:currentPos.top});
-        this.fixedOpenPos = true;
+            let row = $(findDOMNode(this.refs.self)).parent().parent();
+            let currentPos = $(findDOMNode(this.refs.self)).offset();
+            $(findDOMNode(this.refs.self)).offset({left:currentPos.left - row.scrollLeft(),top:currentPos.top});
+            this.fixedOpenPos = true;
+        }
     }
 
     updateScrollPosition(row){

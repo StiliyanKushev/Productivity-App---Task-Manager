@@ -84,6 +84,26 @@
                 display:none;
             }
             
+            .innerGrid.extended::-webkit-scrollbar{
+                width: 1px;
+            }
+
+            .innerGrid.extended{
+                .blue,.red,.yellow{
+                    padding:.63rem !important;
+                }
+
+                .less{
+                    position: relative;
+                }
+            }
+
+            .innerGrid.extended{
+                overflow-y: scroll;
+                overflow-x: hidden;
+                grid-template-rows: auto;
+            }
+
             .innerGrid{
                 width:94%;
                 height:74%;
@@ -126,7 +146,15 @@
                 }
                 }
                 
-                .add-new {
+                .add-new.relative{
+                    overflow: hidden;
+                    p{
+                        position: relative;
+                        margin-top: -.3rem !important;
+                    }
+                }
+
+                .add-new,.less {
                     color: white;
 
                     display: flex;

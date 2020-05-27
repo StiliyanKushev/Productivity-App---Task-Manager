@@ -1,5 +1,7 @@
 import React from "react";
 import { Component } from "react";
+import { findDOMNode } from 'react-dom';
+import $ from 'jquery';
 import Task from '../../components/Task/Task';
 import { connect } from "react-redux";
 import {setDay,confirmCreated,removeTaskFromCell,editTaskFromCell,confirmDeleted,confirmEdited} from '../../actions/scheduleActions';
@@ -14,12 +16,27 @@ class TaskCell extends Component{
             tasksHtml:[],
             empty:[],
             moreTasks: [],
+            isExpanded:false
         };
 
         this.handleAddTask = this.handleAddTask.bind(this);
         this.removeTask = this.removeTask.bind(this);
         this.editTask = this.editTask.bind(this);
+        this.handleExpand = this.handleExpand.bind(this);
+        this.handleShrink = this.handleShrink.bind(this);
+    }
 
+    handleExpand(){
+        this.setState({isExpanded:true},() => {
+            this.generateTasksHtml();
+        })
+    }
+
+    handleShrink(){
+        $(findDOMNode(this.refs.innerGrid)).scrollTop(0);
+        this.setState({isExpanded:false},() => {
+            this.generateTasksHtml();
+        })
     }
     
     removeTask(index){
@@ -39,7 +56,7 @@ class TaskCell extends Component{
         let moreTasks = [];
         let empty = [];
         for (let j = 0; j < this.state.tasks.length; j++) {
-            if (j < 18)
+            if (this.state.isExpanded || j < 18)
                 currentTasks.push(
                     <Task cookies={this.props.cookies} editTaskFromRedux={this.editTask} removeTaskFromRedux={this.removeTask} index={j} key={j} task={this.state.tasks[j]} />
                 );
@@ -96,11 +113,12 @@ class TaskCell extends Component{
             <div key={i} className={`item ${this.props.getClassBy(i + 1)}`}>
                     <p className={this.state.tasks !== undefined ? "date" : "date-e"}>{i + 1}</p>
                     {this.state.tasks !== undefined &&
-                    <div className="innerGrid">
+                    <div ref='innerGrid' className={`innerGrid ${this.state.isExpanded ? 'extended': ''}`}>
                         {this.state.tasksHtml}
                         {this.state.empty}
-                        {this.state.moreTasks.length > 0 && <div className="more"><p>+{this.state.moreTasks.length}</p></div>}
-                        <div className="add-new" onClick={this.handleAddTask}><p>+</p></div>
+                        {!this.state.isExpanded && this.state.moreTasks.length > 0 && <div className="more"><p onClick={this.handleExpand}>+{this.state.moreTasks.length}</p></div>}
+                        {this.state.isExpanded && <div onClick={this.handleShrink} className="less"><p>-</p></div>}
+                        {<div className={`add-new ${this.state.isExpanded? 'relative': ''}`} onClick={this.handleAddTask}><p>+</p></div>}
                     </div>
                     }
             </div>
