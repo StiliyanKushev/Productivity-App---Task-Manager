@@ -39,7 +39,7 @@ function validateEditForm(payload) {
 
     if (!payload || typeof payload.description !== 'string' || payload.description.trim().length < 5 || payload.description.trim().length > 250) {
         isFormValid = false
-        errors.description = 'description must be at least 5 chars long and 250 at most'
+        errors.description = 'description must be at least 5 chars long and 400 at most'
     }
 
     return {

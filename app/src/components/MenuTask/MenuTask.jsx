@@ -6,16 +6,6 @@ import $ from 'jquery';
 import './MenuTask.scss';
 import { Component } from 'react';
 
-function nativeShow(el){
-    var m = el, c = m.style;
-    c.display = "block";
-}
-
-function nativeHide(el){
-    var m = el, c = m.style;
-    c.display = "none";
-}
-
 (function () {
     var win = $(window),
         prev_width = win.width(),
@@ -56,30 +46,32 @@ class MenuTask extends Component {
 
         this.handleChange = this.handleChange.bind(this);
         this.responsive = this.responsive.bind(this);
-        this.resetStyle = this.resetStyle.bind(this);
         this.updateScrollPosition = this.updateScrollPosition.bind(this);
         this.fixFirstOpenPosition = this.fixFirstOpenPosition.bind(this);
     }
 
     componentDidMount() {
+        this.fixFirstOpenPosition();
+        if (!this.props.isMobile || (this.props.visible && this.props.isMobile && !this.props.isExpanded))
+        this.responsive();
+
         $(window).on('hresize', this.props.handleClose);
 
         if (this.props.isMobile) {
             let row = $(findDOMNode(this.refs.self)).parent().parent();
+            this.oldScrollPos = row.scrollLeft();
             row.on('scroll', () => {
                 this.updateScrollPosition(row);
             });
         }
-        else {
-        }
     }
 
     fixFirstOpenPosition() {
+        console.log('fixFirstOpenPosition')
         if (this.props.isMobile) {
             if (this.fixedOpenPos) {
                 return;
             }
-
             let row = $(findDOMNode(this.refs.self)).parent().parent();
             let currentPos = $(findDOMNode(this.refs.self)).offset();
             $(findDOMNode(this.refs.self)).offset({ left: currentPos.left - row.scrollLeft(), top: currentPos.top });
@@ -95,40 +87,17 @@ class MenuTask extends Component {
 
         let currentPos = $(findDOMNode(this.refs.self)).offset();
 
-        //when visible
-        if (this.props.visible == true) {
-            //closed while on scroll
-            if (!currentPos) return;
-            //going right
-            if (oldPos < newPos) {
-                //substract diff from current pos
-                $(findDOMNode(this.refs.self)).offset({ left: currentPos.left - diff, top: currentPos.top });
-            }
-            //going left
-            else {
-                //add diff from current pos
-                $(findDOMNode(this.refs.self)).offset({ left: currentPos.left + diff, top: currentPos.top });
-            }
+        //going right
+        if (oldPos < newPos) {
+            //substract diff from current pos
+            $(findDOMNode(this.refs.self)).offset({ left: currentPos.left - diff, top: currentPos.top });
         }
-        //when invisible
+        //going left
         else {
-
-            nativeShow(findDOMNode(this.refs.self))
-
-            currentPos = $(findDOMNode(this.refs.self)).offset();
-            //going right
-            if (oldPos < newPos) {
-                //substract diff from current pos
-                $(findDOMNode(this.refs.self)).offset({ left: currentPos.left - diff, top: currentPos.top });
-            }
-            //going left
-            else {
-                //add diff from current pos
-                $(findDOMNode(this.refs.self)).offset({ left: currentPos.left + diff, top: currentPos.top });
-            }
-
-            nativeHide(findDOMNode(this.refs.self))
+            //add diff from current pos
+            $(findDOMNode(this.refs.self)).offset({ left: currentPos.left + diff, top: currentPos.top });
         }
+
         this.oldScrollPos = newPos;
     }
 
@@ -138,58 +107,31 @@ class MenuTask extends Component {
         row.unbind('scroll');
     }
 
-    componentWillReceiveProps(newProps) {
-        // if(newProps.visible === true && this.props.visible === false){
-        //     console.log("is about to open");
-        // }
-
-        if (newProps.visible === false && this.props.visible !== false) {
-            this.oldPosToFix = $(findDOMNode(this.refs.self)).parent().parent().scrollLeft();
-            this.resetStyle();
-        }
-    }
-
     handleChange(e) {
         this.setState({ description: e.target.value });
     }
 
-    componentDidUpdate() {
-        if (!this.props.isMobile || (this.props.visible && this.props.isMobile && !this.props.isExpanded))
-            this.responsive();
-    }
-
-    resetStyle() {
-        this.setState({
-            arrowPos: undefined,
-            pointing: undefined,
-        });
-    }
-
     responsive() {
-        if (this.props.visible && this.state.reset) {
-            this.setState({ reset: false });
-        }
-
         let menuPos = ReactDOM.findDOMNode(this).getBoundingClientRect();
 
         //if centered but still no room
         if (this.state.pointing === 'centered' && (menuPos.right > document.body.clientWidth || menuPos.left < 0)) {
-            this.setState({ pointing: 'centered-forced' }, () => this.fixFirstOpenPosition());
+            this.setState({ pointing: 'centered-forced' }, () => this.responsive() && this.fixFirstOpenPosition());
         }
         else {
             //show left pointing
             if (this.state.pointing !== 'centered-forced' && menuPos.right > document.body.clientWidth) {
-                this.setState({ pointing: 'leftPointing' }, () => this.fixFirstOpenPosition());
+                this.setState({ pointing: 'leftPointing' }, () => this.responsive() && this.fixFirstOpenPosition());
             }
 
             //show top pointing
             if (menuPos.bottom > document.body.clientHeight) {
-                this.setState({ pointing: 'topPointing' }, () => this.fixFirstOpenPosition());
+                this.setState({ pointing: 'topPointing' }, () => this.responsive() && this.fixFirstOpenPosition());
             }
 
             //show center pointing
             if (this.state.pointing !== 'centered-forced' && menuPos.left < 0 && this.state.pointing === "leftPointing") {
-                this.setState({ pointing: "centered" }, () => this.fixFirstOpenPosition());
+                this.setState({ pointing: "centered" }, () => this.responsive() && this.fixFirstOpenPosition());
             }
 
             //show right pointing (default) if all of the above are false (cannot use else if coz it breaks stuff i wont explain here)
@@ -198,14 +140,12 @@ class MenuTask extends Component {
             }
         }
 
-        // reset the description on close
-        if (!this.props.visible && !this.state.reset) {
-            this.setState({ description: this.props.description, reset: true });
-        }
+        return true;
     }
 
 
     render() {
+    
         let visibilityCss = {};
 
         if (this.state.visibilityMode === "display") {

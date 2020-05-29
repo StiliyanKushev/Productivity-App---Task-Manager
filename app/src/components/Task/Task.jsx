@@ -31,6 +31,10 @@ class Task extends Component{
 
     async handleEdit(e,newDesc){
         e.stopPropagation(); //do not call handle Click
+        if(newDesc.length > 400 || newDesc.length < 5){
+            toast.error("description must be at least 5 chars long and 400 at most");
+            return;
+        }
         let res = await TaskHandler.editTask(newDesc,this.state.id,this.props.cookies.get("token"));
         if(res.success){
             toast.success(res.message);
@@ -81,17 +85,17 @@ class Task extends Component{
 
         switch(this.state.importantcyLevel){
             default:{
-                return <div className={`blue ${this.props.isMobile ? 'task' : ''}`} onClick={this.handleClick}>{menu}</div>
+                return <div className={`blue ${this.props.isMobile ? 'task' : ''}`} onClick={this.handleClick}>{this.state.menuVisible ? menu: null}</div>
             }
 
             case 1:{
-                return <div className={`blue ${this.props.isMobile ? 'task' : ''}`} onClick={this.handleClick}>{menu}</div>
+                return <div className={`blue ${this.props.isMobile ? 'task' : ''}`} onClick={this.handleClick}>{this.state.menuVisible ? menu: null}</div>
             }
             case 2:{
-                return <div className={`yellow ${this.props.isMobile ? 'task' : ''}`} onClick={this.handleClick}>{menu}</div>
+                return <div className={`yellow ${this.props.isMobile ? 'task' : ''}`} onClick={this.handleClick}>{this.state.menuVisible ? menu: null}</div>
             }
             case 3:{
-                return <div className={`red ${this.props.isMobile ? 'task' : ''}`} onClick={this.handleClick}>{menu}</div>
+                return <div className={`red ${this.props.isMobile ? 'task' : ''}`} onClick={this.handleClick}>{this.state.menuVisible ? menu: null}</div>
             }
         }
     }

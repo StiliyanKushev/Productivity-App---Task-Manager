@@ -4,6 +4,7 @@ import { Component } from "react";
 import Task from '../../components/Task/Task';
 import { connect } from "react-redux";
 import $ from 'jquery';
+import {findDOMNode} from 'react-dom';
 import { 
     setDay, 
     confirmCreated, 
@@ -182,7 +183,7 @@ class TaskRow extends Component {
                 <div className="row-date">
                     <p className="date">{this.getDayString()} <span>{i + 1}</span></p>
                 </div>
-                <div className={`row-tasks ${this.state.mergeMoreTasks === false ? 'expanded' : ''}`}>
+                <div ref='self' className={`row-tasks ${this.state.mergeMoreTasks === false ? 'expanded' : ''}`}>
                     {this.state.tasksHtml}
                     {this.state.moreTasks.length > 0 ? <p onClick={this.handleExpand}>+{this.state.moreTasks.length}</p>: ''}
                 </div>
