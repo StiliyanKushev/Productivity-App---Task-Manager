@@ -67,6 +67,7 @@ class Task extends Component{
         let menu = 
         <MenuTask
             isMobile={this.props.isMobile}
+            isExpanded={this.props.isExpanded}
             id={this.state.id}
             rowIndex={this.props.rowIndex}
             isOnScroll={this.props.isOnScroll} 

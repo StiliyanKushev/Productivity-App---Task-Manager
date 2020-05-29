@@ -65,11 +65,11 @@ class TaskRow extends Component {
         for (let j = 0; j < this.state.tasks.length; j++) {
             if (this.state.mergeMoreTasks === false || j < limit)
                 currentTasks.push(
-                    <Task rowIndex={this.state.index} isMobile={true} isOnScroll={this.state.mergeMoreTasks === false} editTaskFromRedux={this.editTask} removeTaskFromRedux={this.removeTask} cookies={this.props.cookies} index={j} key={j} task={this.state.tasks[j]} />
+                    <Task rowIndex={this.state.index} isExpanded={this.state.mergeMoreTasks === false} isMobile={true} editTaskFromRedux={this.editTask} removeTaskFromRedux={this.removeTask} cookies={this.props.cookies} index={j} key={j} task={this.state.tasks[j]} />
                 );
             else {
                 moreTasks.push(
-                    <Task rowIndex={this.state.index} isMobile={true} editTaskFromRedux={this.editTask} removeTaskFromRedux={this.removeTask} cookies={this.props.cookies} index={j} key={j} task={this.state.tasks[j]} />
+                    <Task rowIndex={this.state.index} isExpanded={this.state.mergeMoreTasks === false} isMobile={true} editTaskFromRedux={this.editTask} removeTaskFromRedux={this.removeTask} cookies={this.props.cookies} index={j} key={j} task={this.state.tasks[j]} />
                 );
             }
         }

@@ -1,4 +1,5 @@
 import React, { Fragment, Component } from 'react';
+import $ from 'jquery';
 
 import './Schedule.scss';
 import ScheduleGrid from '../../components/ScheduleGrid/ScheduleGrid';
