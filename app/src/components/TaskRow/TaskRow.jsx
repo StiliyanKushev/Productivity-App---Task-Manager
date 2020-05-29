@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import { Component } from "react";
 import Task from '../../components/Task/Task';
 import { connect } from "react-redux";
+import $ from 'jquery';
 import { 
     setDay, 
     confirmCreated, 
@@ -130,6 +131,7 @@ class TaskRow extends Component {
     }
 
     componentDidMount() {
+        $(window).on('orientationchange',this.updateTaskLimitAndRender);
         window.addEventListener("resize",this.updateTaskLimitAndRender);
         if (this.state.tasks !== undefined) {
             this.updateTaskLimitAndRender(true);
@@ -137,6 +139,7 @@ class TaskRow extends Component {
     }
 
     componentWillUnmount(){
+        $(window).unbind('orientationchange');
         window.removeEventListener("resize",this.updateTaskLimitAndRender);
     }
 
