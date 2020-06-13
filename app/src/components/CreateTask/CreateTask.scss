@@ -1,6 +1,6 @@
 
 
-@media screen and (max-aspect-ratio: 13/9) {
+@media screen and (max-width:1090px) {
     #create-task-menu.mobile-full{
         width:100vw;
         height:100vh;
@@ -126,9 +126,17 @@
     }   
 }
 
-@media screen and (max-width:1090px) and (min-width: 640px){
+@media screen and (max-width:1090px) and (min-width: 750px){
     #create-task-menu{
-        padding-left: 14rem;
+        padding-left: 26rem;
+        padding-right: 15rem;
+    }
+}
+
+@media screen and (max-width:750px) and (min-width: 640px){
+    #create-task-menu{
+        padding-left: 20rem;
+        padding-right: 10rem;
     }
 }
 

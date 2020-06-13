@@ -2,6 +2,7 @@ import React from 'react';
 import './Home.scss';
 
 const HomeView = function(){
+
     return (
             <div id="home-view">
                 <div>

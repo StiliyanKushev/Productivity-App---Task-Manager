@@ -83,8 +83,23 @@
     }
 }
 
+.onScroll-desktop.rightPointing{
+    margin-left: -2.1rem;
+    margin-top: 2rem;
+}
+
+.onScroll-desktop.topPointing{
+    margin-top: -18.8rem;
+    margin-left: -1.835rem;
+}
+
+.onScroll-desktop.leftPointing{
+    margin-left: -18.3rem;
+    margin-top: 2rem;
+}
+
 .leftPointing{
-    margin-left: -18rem !important;
+    margin-left: -17.9rem;
 }
 
 .leftPointing .menu-arrow{
@@ -93,7 +108,9 @@
 }
 
 .topPointing{
-    margin-top: -18.7rem !important;
+    // margin-top: -18.7rem !important;
+    margin-top: -18.5rem;
+    margin-left: -1.45rem;
 }
 
 .topPointing .menu-arrow{
@@ -107,7 +124,7 @@
     }
 
     .leftPointing{
-        margin-left: -18.3rem !important;
+        margin-left: -17.3rem !important;
     }
 }
 
@@ -126,12 +143,33 @@
         }
     }
 
+    .onScroll-desktop.rightPointing{
+        margin-left: -2.15rem !important;
+        margin-top: 1.9rem !important;
+    }
+
+    .onScroll-desktop.leftPointing{
+        margin-left: -23.3rem !important;
+        margin-top: 2.1rem !important;
+    }
+
+    .onScroll-desktop.topPointing{
+        margin-top: -22.5rem !important;
+        margin-left: -1.9rem !important;
+    }
+
+    .rightPointing{
+        margin-left: -1.55rem;
+        margin-top: 2.5rem;
+    }
+
     .leftPointing{
         margin-left: -22.7rem !important;
     }
 
     .topPointing{
         margin-top: -21.8rem !important;
+        margin-left: -1.25rem !important;
     }
     
     .topPointing .menu-arrow{
@@ -142,10 +180,17 @@
 @media screen and (max-width:640px){
     .menuTask{
         margin-left: -1.2rem;
+    }
+    
+    .leftPointing,.rightPointing,.centered{
         margin-top: 1.5rem !important;
     }
 
+    .topPointing{
+        margin-top: -19rem !important;
+    }
+
     .leftPointing{
-        margin-left: -220px !important;
+        margin-left: -17.3rem !important;
     }
 }

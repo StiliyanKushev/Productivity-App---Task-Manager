@@ -58,11 +58,11 @@ class TaskCell extends Component{
         for (let j = 0; j < this.state.tasks.length; j++) {
             if (this.state.isExpanded || j < 18)
                 currentTasks.push(
-                    <Task cookies={this.props.cookies} editTaskFromRedux={this.editTask} removeTaskFromRedux={this.removeTask} index={j} key={j} task={this.state.tasks[j]} />
+                    <Task isExpanded={this.state.isExpanded} cookies={this.props.cookies} editTaskFromRedux={this.editTask} removeTaskFromRedux={this.removeTask} index={j} key={j} task={this.state.tasks[j]} />
                 );
             else {
                 moreTasks.push(
-                    <Task cookies={this.props.cookies} editTaskFromRedux={this.editTask} removeTaskFromRedux={this.removeTask} index={j} key={j} task={this.state.tasks[j]} />
+                    <Task isExpanded={this.state.isExpanded} cookies={this.props.cookies} editTaskFromRedux={this.editTask} removeTaskFromRedux={this.removeTask} index={j} key={j} task={this.state.tasks[j]} />
                 );
             }
         }

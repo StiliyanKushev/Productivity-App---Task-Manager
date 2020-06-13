@@ -3,6 +3,22 @@
     overflow-x:hidden;
 }
 
+#root *::-webkit-scrollbar, #root::-webkit-scrollbar{
+    width: 5px;
+  }
+  
+  /* Track */
+  #root *::-webkit-scrollbar-track, #root::-webkit-scrollbar-track{
+    box-shadow: inset 0 0 5px grey; 
+    border-radius: 10px;
+  }
+   
+  /* Handle */
+  #root *::-webkit-scrollbar-thumb, #root::-webkit-scrollbar-thumb{
+    background: rgba(255,255,255,0.7); 
+    border-radius: 10px;
+  }
+
 #site-content{
     #schedule-view{
         #grid{
@@ -90,12 +106,12 @@
             }
             
             .innerGrid.extended::-webkit-scrollbar{
-                width: 1px;
+                width: 0px;
             }
 
             .innerGrid.extended{
-                .blue,.red,.yellow{
-                    padding:.63rem !important;
+                .add-new,.blue,.red,.yellow{
+                    padding:.43rem;
                 }
 
                 .less{
@@ -129,6 +145,10 @@
                 box-shadow: inset 0px 4px 4px 0px rgba(0,0,0,0.25);
                 }
                 
+                .empty{
+                    cursor: initial;
+                }
+
                 .empty,
                 .more{
                 border:none;
@@ -195,7 +215,6 @@
     }
 }
 
-
 @media screen and (min-width:1400px){
     #schedule-view{
         #grid{
@@ -215,6 +234,12 @@
             .add-new p{
                 font-size: 1.5rem !important;
                 margin-top: -.1rem !important;
+            }
+
+            .innerGrid.extended{
+                .add-new,.blue,.red,.yellow{
+                    padding:.63rem !important;
+                }
             }
         }
     }

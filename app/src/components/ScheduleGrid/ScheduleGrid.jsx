@@ -68,6 +68,8 @@ class ScheduleGrid extends Component {
         let weekday = new Date(this.props.year,this.props.month - 1,day);
         let current = new Date();
 
+        if(day !== weekday.getDate()) return ''; //invalid date
+
         if(weekday.getDate() === current.getDate()
         && weekday.getMonth() === current.getMonth()
         && weekday.getFullYear() === current.getFullYear()) return 'current';

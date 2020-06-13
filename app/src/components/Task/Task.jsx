@@ -70,9 +70,9 @@ class Task extends Component{
     render(){
         let menu = 
         <MenuTask
+            id={this.state.id}
             isMobile={this.props.isMobile}
             isExpanded={this.props.isExpanded}
-            id={this.state.id}
             rowIndex={this.props.rowIndex}
             isOnScroll={this.props.isOnScroll} 
             handleEdit={this.handleEdit} 

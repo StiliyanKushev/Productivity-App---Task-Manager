@@ -4,6 +4,8 @@ import './header.scss';
 import { connect } from 'react-redux';
 import {setCurrent} from '../../actions/navActions';
 
+import $ from 'jquery';
+
 class AppHeader extends Component {
     constructor(props) {
         super(props);
@@ -23,6 +25,7 @@ class AppHeader extends Component {
 
         //re render the component to display the new "current" tag
         this.forceUpdate();
+        
     }
 
     applyListItemCss(b){

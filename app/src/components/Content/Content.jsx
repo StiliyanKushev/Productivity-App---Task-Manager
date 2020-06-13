@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Redirect, Switch, Route } from "react-router-dom";
 import CustomRoute from '../CustomRoute/CustomRoute';
+import { withRouter } from 'react-router-dom';
 
 //import all views
 import HomeView from '../../views/Home/Home';
@@ -9,6 +10,8 @@ import LogoutView from '../../views/Logout/Logout';
 import RegisterView from '../../views/Register/Register';
 import AboutMeView from '../../views/AboutMe/AboutMe';
 import ScheduleView from '../../views/Schedule/Schedule';
+
+import $ from 'jquery';
 
 import { connect } from 'react-redux';
 import {setNavAuth} from '../../actions/navActions';
@@ -21,6 +24,11 @@ class AppContent extends Component{
         if(this.props.cookies.get("token")){ // TODO check if token expires date
             this.props.setNavAuth();
         }
+    }
+
+    componentDidMount(){
+        $("#site-content").delay(0).animate({ opacity: 0 }, 0)
+        $("#site-content").delay(0).animate({ opacity: 1 }, 500)
     }
 
     render(){
@@ -47,4 +55,4 @@ function mapStateToProps(state){
     }
 }
 
-export default connect(mapStateToProps,{setNavAuth})(AppContent);
+export default withRouter(connect(mapStateToProps,{setNavAuth})(AppContent));

@@ -12,7 +12,7 @@
         & > p{
             margin-top: 2rem;
             margin-bottom: 2rem;
-            font-size: 3.5rem;
+            font-size: 2rem;
         }
 
         #user-info{
@@ -150,7 +150,7 @@
     #site-content{
         #aboutme-view{
             & > p{
-                font-size: 3rem;
+                font-size: 1.9rem;
             }
             #user-info{
                 form{
@@ -187,7 +187,7 @@
             @include exclude-header("mobile");
             margin-top: 5rem;
             p{
-                font-size: 2.6rem;
+                font-size: 1.7rem;
             }
             #user-info{
                 flex-direction: column;

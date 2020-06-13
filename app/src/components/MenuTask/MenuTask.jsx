@@ -32,7 +32,7 @@ class MenuTask extends Component {
 
         this.state = {
             arrowPos: undefined,
-            pointing: undefined,
+            pointing: 'rightPointing',
             description: this.props.description,
             reset: false,
             visibilityMode: 'display',
@@ -43,11 +43,20 @@ class MenuTask extends Component {
         this.fixedOpenPos = false;
         this.oldScrollPos = 0;
         this.oldPosToFix = 0;
+        this.isOnScrollDesktop = this.props.isExpanded;
 
         this.handleChange = this.handleChange.bind(this);
         this.responsive = this.responsive.bind(this);
         this.updateScrollPosition = this.updateScrollPosition.bind(this);
         this.fixFirstOpenPosition = this.fixFirstOpenPosition.bind(this);
+    }
+
+    componentWillMount(){
+        this.isOnScrollDesktop = this.props.isExpanded && !this.props.isMobile;
+    }
+
+    componentDidUpdate(){
+        this.responsive()
     }
 
     componentDidMount() {
@@ -64,23 +73,40 @@ class MenuTask extends Component {
                 this.updateScrollPosition(row);
             });
         }
+        else{
+            let cell = $(findDOMNode(this.refs.self)).parent().parent();
+            this.oldScrollPos = cell.scrollTop();
+            cell.on('scroll', () => {
+                this.updateScrollPosition();
+            });
+        }
     }
 
     fixFirstOpenPosition() {
         console.log('fixFirstOpenPosition')
+        if (this.fixedOpenPos) {
+            return;
+        }
         if (this.props.isMobile) {
-            if (this.fixedOpenPos) {
-                return;
-            }
             let row = $(findDOMNode(this.refs.self)).parent().parent();
             let currentPos = $(findDOMNode(this.refs.self)).offset();
             $(findDOMNode(this.refs.self)).offset({ left: currentPos.left - row.scrollLeft(), top: currentPos.top });
             this.fixedOpenPos = true;
         }
+        else{
+            let cell = $(findDOMNode(this.refs.self)).parent().parent();
+            let currentPos = $(findDOMNode(this.refs.self)).offset();
+            $(findDOMNode(this.refs.self)).offset({ left: currentPos.left, top: currentPos.top - cell.scrollTop() });
+            this.fixedOpenPos = true;
+        }
     }
 
     updateScrollPosition(row) {
-        let newPos = $(row.scrollLeft())[0];
+        let newPos;
+        if(this.props.isMobile)
+        newPos = $(row.scrollLeft())[0];
+        else
+        newPos = $(row.scrollTop())[0];
         if (newPos == undefined) newPos = 0;
         let oldPos = this.oldScrollPos;
         let diff = Math.abs(newPos - oldPos);
@@ -89,13 +115,23 @@ class MenuTask extends Component {
 
         //going right
         if (oldPos < newPos) {
-            //substract diff from current pos
-            $(findDOMNode(this.refs.self)).offset({ left: currentPos.left - diff, top: currentPos.top });
+            if(this.props.isMobile){
+                //substract diff from current pos
+                $(findDOMNode(this.refs.self)).offset({ left: currentPos.left - diff, top: currentPos.top });
+            }
+            else{
+                $(findDOMNode(this.refs.self)).offset({ left: currentPos.left, top: currentPos.top - diff });
+            }
         }
         //going left
         else {
-            //add diff from current pos
-            $(findDOMNode(this.refs.self)).offset({ left: currentPos.left + diff, top: currentPos.top });
+            if(this.props.isMobile){
+                //add diff from current pos
+                $(findDOMNode(this.refs.self)).offset({ left: currentPos.left + diff, top: currentPos.top });
+            }
+            else{
+                $(findDOMNode(this.refs.self)).offset({ left: currentPos.left, top: currentPos.top + diff });
+            }
         }
 
         this.oldScrollPos = newPos;
@@ -114,56 +150,36 @@ class MenuTask extends Component {
     responsive() {
         let menuPos = ReactDOM.findDOMNode(this).getBoundingClientRect();
 
-        //if centered but still no room
-        if (this.state.pointing === 'centered' && (menuPos.right > document.body.clientWidth || menuPos.left < 0)) {
-            this.setState({ pointing: 'centered-forced' }, () => this.responsive() && this.fixFirstOpenPosition());
-        }
-        else {
-            //show left pointing
-            if (this.state.pointing !== 'centered-forced' && menuPos.right > document.body.clientWidth) {
-                this.setState({ pointing: 'leftPointing' }, () => this.responsive() && this.fixFirstOpenPosition());
-            }
-
-            //show top pointing
-            if (menuPos.bottom > document.body.clientHeight) {
-                this.setState({ pointing: 'topPointing' }, () => this.responsive() && this.fixFirstOpenPosition());
-            }
-
-            //show center pointing
-            if (this.state.pointing !== 'centered-forced' && menuPos.left < 0 && this.state.pointing === "leftPointing") {
-                this.setState({ pointing: "centered" }, () => this.responsive() && this.fixFirstOpenPosition());
-            }
-
-            //show right pointing (default) if all of the above are false (cannot use else if coz it breaks stuff i wont explain here)
-            if (!(menuPos.right > document.body.clientWidth) && !(menuPos.bottom > document.body.clientHeight) && !(menuPos.left < 0 && this.state.pointing === "leftPointing") && this.state.pointing === undefined) {
-                this.setState({ pointing: 'rightPointing' }, () => this.fixFirstOpenPosition());
-            }
+        //show left pointing
+        if (menuPos.right > document.body.clientWidth) {
+            this.setState({ pointing: 'leftPointing' }, () => this.fixFirstOpenPosition());
         }
 
-        return true;
+        //if centered
+        if (this.state.pointing === 'leftPointing' && (menuPos.right > document.body.clientWidth || menuPos.left < 0)) {
+            this.setState({ pointing: 'centered' }, () => this.fixFirstOpenPosition());
+        }
+
+        //show top pointing
+        if (this.state.pointing !== 'topPointing' && menuPos.bottom >= window.innerHeight) {
+            this.setState({ pointing: 'topPointing' }, () => {
+
+                //force browser to redraw the date switcher to fix a strange chrome bug
+                let sel = document.getElementById('date-switcher');
+                sel.style.display='none';
+                // eslint-disable-next-line
+                sel.offsetHeight; // no need to store this anywhere, the reference is enough
+                sel.style.display='';
+                
+                this.fixFirstOpenPosition()
+            });
+        }
     }
 
 
     render() {
-    
-        let visibilityCss = {};
-
-        if (this.state.visibilityMode === "display") {
-            visibilityCss = {
-                display: this.props.visible ? "initial" : "none"
-            }
-        }
-        else if (this.state.visibilityMode === "visibility") {
-            visibilityCss = {
-                visibility: this.props.visible ? "initial" : "hidden"
-            }
-        }
-
-        let pointing = this.state.pointing;
-        if (pointing == 'centered-forced') pointing = 'centered';
-
         return (
-            <div ref='self' id={`menu-${this.props.id}`} className={`menuTask ${pointing}`} style={{ ...visibilityCss }}>
+            <div ref='self' id={`menu-${this.props.id}`} className={`menuTask ${this.state.pointing} ${this.isOnScrollDesktop? 'onScroll-desktop':''}`}>
                 <div className="menu-arrow" style={{ left: `${this.state.arrowPos || '8'}px` }}></div>
                 <textarea cols={30} rows={7} value={this.state.description} onChange={this.handleChange} />
                 <div>
