@@ -14,7 +14,7 @@
     "esm": "^3.2.25",
     "express": "^4.17.1",
     "mongoose": "^5.8.9",
-    "validator": "^12.2.0"
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0"
